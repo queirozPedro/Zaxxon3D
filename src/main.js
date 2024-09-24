@@ -7,12 +7,10 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Adicionando uma luz
 const light = new THREE.AmbientLight(0xffffff); // Luz ambiente
 scene.add(light);
 
-// Criando a geometria da nave
-const playerGeometry = new THREE.BoxGeometry(1, 0.5, 0.5);
+const playerGeometry = new THREE.BoxGeometry(0.5, 0.5, 1);
 const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const player = new THREE.Mesh(playerGeometry, playerMaterial);
 scene.add(player);
@@ -28,26 +26,18 @@ for (let i = 0; i < 5; i++) {
     scene.add(obstacle);
 }
 
-// Criando um plano para o chão
-const planeGeometry = new THREE.PlaneGeometry(10, 10);
+/*
+    Criando um plano para reprensentar o chão
+*/
+const planeGeometry = new THREE.PlaneGeometry(20, 80);
 const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -Math.PI / 2; // Rotacionando o plano para que fique horizontal
 scene.add(plane);
 
-// Posição inicial do jogador
-player.position.z = -5;
-
 // Ajustando a câmera para a perspectiva do Zaxxon
-camera.position.set(0, 5, 10);
+camera.position.set(10, 10, 10);
 camera.lookAt(0, 0, 0);
-
-// Para um movimento mais suave da câmera
-const offset = new THREE.Vector3(0, 5, 10);
-function updateCamera() {
-    camera.position.lerp(player.position.clone().add(offset), 0.1); // Suaviza a movimentação da câmera
-    camera.lookAt(player.position); // Mantém a câmera olhando para a nave
-}
 
 // Variáveis do jogo
 let score = 0;
@@ -78,7 +68,7 @@ function animate() {
     // Mover obstáculos
     obstacles.forEach(obstacle => {
         obstacle.position.z += 0.1; // Mover o obstáculo para frente
-        if (obstacle.position.z > 5) {
+        if (obstacle.position.z > 20) {
             obstacle.position.z = -20; // Reiniciar a posição
             obstacle.position.x = Math.random() * 10 - 5; // Nova posição aleatória
             score++; // Aumentar a pontuação
@@ -88,12 +78,6 @@ function animate() {
     // Atualizar pontuação
     scoreElement.innerText = `Score: ${score}`;
 
-    // Atualizar a posição da câmera
-    updateCamera();
-
-    // Rotação da nave para efeito visual
-    player.rotation.y += 0.01;
-
     renderer.render(scene, camera);
 }
 
@@ -101,11 +85,11 @@ function animate() {
 window.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'ArrowUp':
-            player.position.z += 0.1;
+            player.position.y += 0.1;
             sound.play();
             break;
         case 'ArrowDown':
-            player.position.z -= 0.1;
+            player.position.y -= 0.1;
             sound.play();
             break;
         case 'ArrowLeft':
