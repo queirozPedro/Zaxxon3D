@@ -9,9 +9,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Ajustando a câmera para a perspectiva do Zaxxon
-camera.position.set(8, 10, 10);
+camera.position.set(-8, 10, -10);
 camera.lookAt(0, 0, 0);
-
 
 // Controles orbitais para teste
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -22,83 +21,86 @@ controls.update();
 // Classe Player que representa o jogador
 class Player {
     constructor() {
-
         this.model = null
         this.load(this)
 
         this.minHeight = 0.35; // Altura mínima (limite do chão)
         this.maxHeight = 5;   // Altura máxima (limite superior)
-        
         this.maxWidthVariation = 9.65;   // Limites de movimentação lateral
-        
-        // definir a altura inicial 
-        // this.position.y = this.minHeight;
     }
 
-    load(object){
+    showPosition(){
+        if(this.model){
+            console.log("Posição X:"+ this.model.position.x)
+            console.log("Posição Y:"+ this.model.position.y)
+            console.log("Posição Z:"+ this.model.position.z)
+        }
+    }
+
+    movementControls(keysPressed) {
+        if(keysPressed['w'] || keysPressed['ArrowUp']){
+            if (this.model.position.y < this.maxHeight) this.model.position.y += 0.1;
+            if(keysPressed['a'] || keysPressed['ArrowLeft']){
+                if (this.model.position.x < this.maxWidthVariation) this.model.position.x += 0.1;
+            }
+            if(keysPressed['d'] || keysPressed['ArrowRight']){
+                if (this.model.position.x > -this.maxWidthVariation) this.model.position.x -= 0.1;
+            }
+        }
+        if(keysPressed['s'] || keysPressed['ArrowDown']){
+            if (this.model.position.y > this.minHeight) this.model.position.y -= 0.1;
+            if(keysPressed['a'] || keysPressed['ArrowLeft']){
+                if (this.model.position.x < this.maxWidthVariation) this.model.position.x += 0.1;
+            }
+            if(keysPressed['d'] || keysPressed['ArrowRight']){
+                if (this.model.position.x > -this.maxWidthVariation) this.model.position.x -= 0.1;
+            }
+        }
+        if(keysPressed['a'] || keysPressed['ArrowLeft']){
+            if (this.model.position.x < this.maxWidthVariation) this.model.position.x += 0.1;
+        }
+        if(keysPressed['d'] || keysPressed['ArrowRight']){
+            if (this.model.position.x > -this.maxWidthVariation) this.model.position.x -= 0.1;
+        }
+    }
+
+    load(object) {
         // Instantiate a loader
         const loader = new GLTFLoader();
-        
+
         // Load a glTF resource
         loader.load(
             // resource URL
             '/assets/models/scene.gltf',
             // called when the resource is loaded
-            function ( gltf ) {
-        
-                scene.add( gltf.scene );
+            function (gltf) {
+                scene.add(gltf.scene);
                 object.model = gltf.scene.children[0];
-        
+                object.model.scale.set(0.5, 0.5, 0.5);
+
                 gltf.animations; // Array<THREE.AnimationClip>
                 gltf.scene; // THREE.Group
                 gltf.scenes; // Array<THREE.Group>
                 gltf.cameras; // Array<THREE.Camera>
                 gltf.asset; // Object
-        
+
             },
             // called while loading is progressing
-            function ( xhr ) {
-        
-                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-        
+            function (xhr) {
+
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
             },
             // called when loading has errors
-            function ( error ) {
-        
-                console.log( 'An error happened' );
-        
+            function (error) {
+
+                console.log('An error happened');
+
             }
         );
     }
-
-    movementControls(event) {
-        switch (event.key) {
-            case 'ArrowUp':
-            case 'w':
-                if (this.position.y < this.maxHeight) {
-                    this.position.y += 0.1;
-                }
-                break;
-            case 'ArrowDown':
-            case 's':
-                if (this.position.y > this.minHeight) {
-                    this.position.y -= 0.1;
-                }
-                break;
-            case 'ArrowLeft':
-            case 'a':
-                if(this.position.x > -this.maxWidthVariation)
-                    this.position.x -= 0.1;
-                break;
-            case 'ArrowRight':
-            case 'd':
-                if(this.position.x < this.maxWidthVariation)
-                    this.position.x += 0.1;
-                break;
-        }
-    }
 }
 
+// Instanciando o player
 const player = new Player();
 
 // Um plano que serve para marcar o chão da fase
@@ -106,9 +108,8 @@ const planeGeometry = new THREE.PlaneGeometry(20, 100);
 const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -Math.PI / 2;
-plane.position.z = -20;
+plane.position.z = 20;
 scene.add(plane);
-
 
 // Função animate, que executa a cada quadro
 function animate() {
@@ -116,7 +117,12 @@ function animate() {
 }
 renderer.setAnimationLoop(animate);
 
-// Listener para capturar pressionamentos de tecla
+// Um array que atribui true para as teclas que estão pressionadas
+const keysPressed = {}
 window.addEventListener('keydown', (event) => {
-    player.movementControls(event);
+    keysPressed[event.key] = true;
+    player.movementControls(keysPressed);
+});
+window.addEventListener('keyup',  (event) => {
+    keysPressed[event.key] = false;
 });
