@@ -71,7 +71,7 @@ class Player {
         // Load a glTF resource
         loader.load(
             // resource URL
-            '/assets/models/scene.gltf',
+            '/assets/SpaceShip/scene.gltf',
             // called when the resource is loaded
             function (gltf) {
                 scene.add(gltf.scene);
@@ -103,6 +103,95 @@ class Player {
 // Instanciando o player
 const player = new Player();
 
+class Wall {
+    constructor() {
+        this.model = null
+        this.load(this)
+    }
+
+    load(object) {
+        // Instantiate a loader
+        const loader = new GLTFLoader();
+
+        // Load a glTF resource
+        loader.load(
+            // resource URL
+            '/assets/Wall/scene.gltf',
+            // called when the resource is loaded
+            function (gltf) {
+                scene.add(gltf.scene);
+                object.model = gltf.scene.children[0];
+                object.model.scale.set(0.2, 0.2, 0.2);
+                object.model.position.set(0, 3, 3)
+                gltf.animations; // Array<THREE.AnimationClip>
+                gltf.scene; // THREE.Group
+                gltf.scenes; // Array<THREE.Group>
+                gltf.cameras; // Array<THREE.Camera>
+                gltf.asset; // Object
+
+            },
+            // called while loading is progressing
+            function (xhr) {
+
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+            // called when loading has errors
+            function (error) {
+
+                console.log('An error happened');
+
+            }
+        );
+    }
+}
+
+let wall = new Wall()
+
+class Turret {
+    constructor() {
+        this.model = null
+        this.load(this)
+    }
+
+    load(object) {
+        // Instantiate a loader
+        const loader = new GLTFLoader();
+
+        // Load a glTF resource
+        loader.load(
+            // resource URL
+            '/assets/Turret/scene.gltf',
+            // called when the resource is loaded
+            function (gltf) {
+                scene.add(gltf.scene);
+                object.model = gltf.scene.children[0];
+                object.model.scale.set(1, 1, 1);
+                object.model.position.set(3, 3, 3)
+                gltf.animations; // Array<THREE.AnimationClip>
+                gltf.scene; // THREE.Group
+                gltf.scenes; // Array<THREE.Group>
+                gltf.cameras; // Array<THREE.Camera>
+                gltf.asset; // Object
+
+            },
+            // called while loading is progressing
+            function (xhr) {
+
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+            // called when loading has errors
+            function (error) {
+
+                console.log('An error happened');
+
+            }
+        );
+    }
+}
+
+let turret = new Turret()
+
+
 // Um plano que serve para marcar o chão da fase
 const planeGeometry = new THREE.PlaneGeometry(20, 100);
 const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
@@ -110,6 +199,11 @@ const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -Math.PI / 2;
 plane.position.z = 20;
 scene.add(plane);
+
+// Luz Ambiente
+const light = new THREE.AmbientLight(0xffffff, 3);
+light.position.set( 0, 5, 0)
+scene.add(light)
 
 // Função animate, que executa a cada quadro
 function animate() {
