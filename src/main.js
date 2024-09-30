@@ -29,14 +29,6 @@ class Player {
         this.maxWidthVariation = 9.65;   // Limites de movimentação lateral
     }
 
-    showPosition(){
-        if(this.model){
-            console.log("Posição X:"+ this.model.position.x)
-            console.log("Posição Y:"+ this.model.position.y)
-            console.log("Posição Z:"+ this.model.position.z)
-        }
-    }
-
     movementControls(keysPressed) {
         if(keysPressed['w'] || keysPressed['ArrowUp']){
             if (this.model.position.y < this.maxHeight) this.model.position.y += 0.1;
@@ -71,7 +63,7 @@ class Player {
         // Load a glTF resource
         loader.load(
             // resource URL
-            '/assets/SpaceShip/scene.gltf',
+            '/assets/models/spaceship/scene.gltf',
             // called when the resource is loaded
             function (gltf) {
                 scene.add(gltf.scene);
@@ -99,53 +91,8 @@ class Player {
         );
     }
 }
-
 // Instanciando o player
 const player = new Player();
-
-class Wall {
-    constructor() {
-        this.model = null
-        this.load(this)
-    }
-
-    load(object) {
-        // Instantiate a loader
-        const loader = new GLTFLoader();
-
-        // Load a glTF resource
-        loader.load(
-            // resource URL
-            '/assets/Wall/scene.gltf',
-            // called when the resource is loaded
-            function (gltf) {
-                scene.add(gltf.scene);
-                object.model = gltf.scene.children[0];
-                object.model.scale.set(0.2, 0.2, 0.2);
-                object.model.position.set(0, 3, 3)
-                gltf.animations; // Array<THREE.AnimationClip>
-                gltf.scene; // THREE.Group
-                gltf.scenes; // Array<THREE.Group>
-                gltf.cameras; // Array<THREE.Camera>
-                gltf.asset; // Object
-
-            },
-            // called while loading is progressing
-            function (xhr) {
-
-                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-            },
-            // called when loading has errors
-            function (error) {
-
-                console.log('An error happened');
-
-            }
-        );
-    }
-}
-
-let wall = new Wall()
 
 class Turret {
     constructor() {
@@ -160,7 +107,7 @@ class Turret {
         // Load a glTF resource
         loader.load(
             // resource URL
-            '/assets/Turret/scene.gltf',
+            '/assets/models/turret/scene.gltf',
             // called when the resource is loaded
             function (gltf) {
                 scene.add(gltf.scene);
@@ -190,7 +137,6 @@ class Turret {
 }
 
 let turret = new Turret()
-
 
 // Um plano que serve para marcar o chão da fase
 const planeGeometry = new THREE.PlaneGeometry(20, 100);
