@@ -8,36 +8,21 @@ class Turret {
     }
 
     load(object) {
-        // Instantiate a loader
         const loader = new GLTFLoader();
-
-        // Load a glTF resource
+    
         loader.load(
-            // resource URL
-            '/assets/models/turret/scene.gltf',
-            // called when the resource is loaded
-            function (gltf) {
-                scene.add(gltf.scene);
+            '/src/assets/models/turret/scene.gltf',
+            (gltf) => {
+                object.scene.add(gltf.scene); // Use a referência correta aqui
                 object.model = gltf.scene.children[0];
                 object.model.scale.set(1, 1, 1);
-                object.model.position.set(3, 3, 3)
-                gltf.animations; // Array<THREE.AnimationClip>
-                gltf.scene; // THREE.Group
-                gltf.scenes; // Array<THREE.Group>
-                gltf.cameras; // Array<THREE.Camera>
-                gltf.asset; // Object
-
+                object.model.position.set(3, 3, 3);
             },
-            // called while loading is progressing
-            function (xhr) {
-
+            (xhr) => {
                 console.log((xhr.loaded / xhr.total * 100) + '% loaded');
             },
-            // called when loading has errors
-            function (error) {
-
-                console.log('An error happened');
-
+            (error) => {
+                console.error('An error happened', error);
             }
         );
     }

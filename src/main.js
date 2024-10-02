@@ -23,7 +23,7 @@ controls.update();
 
 // Instanciando o player
 const player = new Player(scene);
-
+const wall = new Wall(scene, 5, 3, 0.1, { x: 0, y: 1.5, z: -5 }); 
 const turret = new Turret(scene)
 
 
