@@ -21,17 +21,25 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0);
 controls.update();
 
+// Criação do jogador
 const player = new Player(scene);
-// const wall = new Wall(scene, 5, 3, 0.1, { x: 0, y: 1.5, z: -5 }); 
-// const turret = new Turret(scene);
 
-// Um plano que serve para marcar o chão da fase
+// Criação do chão
 const ground = new Ground(scene);
 
 // Luz Ambiente
 const light = new THREE.AmbientLight(0xffffff, 3);
 light.position.set(0, 5, 0);
 scene.add(light);
+
+// Um array que atribui true para as teclas que estão pressionadas
+const keysPressed = {};
+window.addEventListener('keydown', (event) => {
+    keysPressed[event.key] = true;
+});
+window.addEventListener('keyup', (event) => {
+    keysPressed[event.key] = false;
+});
 
 // Função animate, que executa a cada quadro
 function animate() {
@@ -43,6 +51,9 @@ function animate() {
         // Calcula o tempo entre frames
         const deltaTime = clock.getDelta();
 
+        // Atualiza a posição da nave com base nas teclas pressionadas
+        player.movementControls(keysPressed, deltaTime);
+
         // Atualiza a posição da textura do chão
         ground.update(deltaTime);
 
@@ -50,23 +61,11 @@ function animate() {
         controls.update();
 
         // Renderiza a cena
-        renderer.render(scene, camera);
+        renderer.render(scene, camera);    
     }
 
     render();
 }
-
-// Um array que atribui true para as teclas que estão pressionadas
-const keysPressed = {};
-window.addEventListener('keydown', (event) => {
-    keysPressed[event.key] = true;
-    if (player) {
-        player.movementControls(keysPressed);
-    }
-});
-window.addEventListener('keyup', (event) => {
-    keysPressed[event.key] = false;
-});
 
 // Iniciar a animação
 animate();

@@ -41,29 +41,22 @@ class Player {
 
     load() {
         const loader = new GLTFLoader();
-    
+
         loader.load(
-            // Caminho correto para o modelo
-            '/src/assets/models/spaceship/scene.gltf',  // Corrigido
-    
-            // Chamado quando o recurso é carregado
+            '/src/assets/models/spaceship/scene.gltf', // Caminho para o modelo GLTF
             (gltf) => {
                 this.scene.add(gltf.scene);
                 this.model = gltf.scene.children[0];
-                this.model.scale.set(0.8, 1, 0.8);
+                this.model.scale.set(0.8, 1, 0.8); // Ajuste de escala
+                console.log('Modelo carregado:', this.model); // Verifique se o modelo foi carregado
             },
-    
-            // Progresso do carregamento
             (xhr) => {
-                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                console.log((xhr.loaded / xhr.total * 100) + '% carregado');
             },
-    
-            // Chamado quando ocorre um erro no carregamento
             (error) => {
                 console.error('Erro ao carregar o modelo:', error);
             }
         );
     }
 }
-
 export default Player;
