@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 class Player {
@@ -6,8 +5,8 @@ class Player {
         this.model = null;
         this.scene = scene;  // Referência à cena recebida no construtor
         this.minHeight = 0.35; // Altura mínima (limite do chão)
-        this.maxHeight = 5;    // Altura máxima (limite superior)
-        this.maxWidthVariation = 9.65; // Limites de movimentação lateral
+        this.maxHeight = 8;    // Altura máxima (limite superior)
+        this.maxWidthVariation = 13.5; // Limites de movimentação lateral
         this.load();  // Chama o método de carregamento do modelo
     }
 
@@ -51,7 +50,7 @@ class Player {
             (gltf) => {
                 this.scene.add(gltf.scene);
                 this.model = gltf.scene.children[0];
-                this.model.scale.set(0.5, 0.5, 0.5);
+                this.model.scale.set(0.8, 1, 0.8);
             },
     
             // Progresso do carregamento
