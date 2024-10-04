@@ -23,9 +23,10 @@ controls.update();
 
 // Criação do jogador
 const player = new Player(scene);
-
 // Criação do chão
 const ground = new Ground(scene);
+//Criação parede
+const wall = new Wall(scene, 5, 5, 1, { x: 0, y: 0, z: +30 }); // A parede começando na posição z -10
 
 // Luz Ambiente
 const light = new THREE.AmbientLight(0xffffff, 3);
@@ -61,7 +62,9 @@ function animate() {
         controls.update();
 
         // Renderiza a cena
-        renderer.render(scene, camera);    
+        renderer.render(scene, camera);   
+        
+        wall.updatePosition(player);
     }
 
     render();
