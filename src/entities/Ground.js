@@ -2,12 +2,21 @@ import * as THREE from 'three';
 
 class Ground {
     constructor(scene) {
-        // Carregar a textura do chão
+        this.load()
+        const groundGeometry = new THREE.PlaneGeometry(30, 300);
+        this.ground = new THREE.Mesh(groundGeometry, this.groundMaterial);
+
+        this.ground.rotation.x = -Math.PI / 2;
+        this.ground.position.z = 110;
+        scene.add(this.ground);
+    }
+
+    load() {
         const loader = new THREE.TextureLoader();
         const texture = loader.load('/src/assets/textures/ground.png', (texture) => {
             texture.wrapS = THREE.RepeatWrapping;
             texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(1, 20);  // Repetir a textura no eixo Y
+            texture.repeat.set(1, 20);
         });
 
         // Criar o material usando a textura
@@ -15,19 +24,6 @@ class Ground {
             map: texture,
             side: THREE.DoubleSide
         });
-
-        // Definir a geometria do chão
-        const groundGeometry = new THREE.PlaneGeometry(30, 600);
-
-        // Criar a malha do chão com geometria e material
-        this.ground = new THREE.Mesh(groundGeometry, this.groundMaterial);
-
-        // Rotacionar e posicionar o chão
-        this.ground.rotation.x = -Math.PI / 2;
-        this.ground.position.z = 80;
-
-        // Adicionar o chão à cena
-        scene.add(this.ground);
     }
 
     // Função para mover a textura do chão

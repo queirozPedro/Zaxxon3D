@@ -13,7 +13,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Ajustando a câmera para a perspectiva do Zaxxon
-camera.position.set(-12, 14, -17);
+camera.position.set(-12, 19, -17);
 camera.lookAt(0, 0, 0);
 
 // Controles orbitais para teste
@@ -21,18 +21,17 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0);
 controls.update();
 
-// Criação do jogador
+// Criação do jogador, o chão e a torreta
 const player = new Player(scene);
-
-// Criação do chão
 const ground = new Ground(scene);
+const wall = new Wall(scene)
 
 // Luz Ambiente
-const light = new THREE.AmbientLight(0xffffff, 3);
-light.position.set(0, 5, 0);
+const light = new THREE.PointLight(0xffffff, 1000);
+light.position.set(0, 20, 0);
 scene.add(light);
 
-// Um array que atribui true para as teclas que estão pressionadas
+// Um dicionario que atribui true para as teclas que estão pressionadas no momento
 const keysPressed = {};
 window.addEventListener('keydown', (event) => {
     keysPressed[event.key] = true;
@@ -41,29 +40,25 @@ window.addEventListener('keyup', (event) => {
     keysPressed[event.key] = false;
 });
 
-// Função animate, que executa a cada quadro
+// Relógio que será usado para medir o deltaTime
+const clock = new THREE.Clock();
+
+function render() {
+    requestAnimationFrame(render);
+
+    // Calcula o tempo entre frames
+    const deltaTime = clock.getDelta();
+
+    player.movementControls(keysPressed);
+    ground.update(deltaTime);
+    
+    wall.controlWall();
+
+    renderer.render(scene, camera);    
+}
+
+// Função animate, que executa a cada quadro (parecida com o método Update do Unity)
 function animate() {
-    const clock = new THREE.Clock();  // Relógio para medir o deltaTime
-
-    function render() {
-        requestAnimationFrame(render);
-
-        // Calcula o tempo entre frames
-        const deltaTime = clock.getDelta();
-
-        // Atualiza a posição da nave com base nas teclas pressionadas
-        player.movementControls(keysPressed, deltaTime);
-
-        // Atualiza a posição da textura do chão
-        ground.update(deltaTime);
-
-        // Atualiza os controles orbitais
-        controls.update();
-
-        // Renderiza a cena
-        renderer.render(scene, camera);    
-    }
-
     render();
 }
 
