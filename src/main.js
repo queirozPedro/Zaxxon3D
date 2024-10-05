@@ -3,6 +3,7 @@ import Player from './entities/Player.js';
 import Turret from './entities/Turret.js';
 import Wall from './entities/Wall.js';
 import Ground from './entities/Ground.js';
+import Rocket from './entities/rocket.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // Cena, câmera e renderizador
@@ -25,6 +26,7 @@ controls.update();
 const player = new Player(scene);
 const ground = new Ground(scene);
 const wall = new Wall(scene)
+const rocket = new Rocket(scene)
 
 // Luz Ambiente
 const light = new THREE.PointLight(0xffffff, 1000);
@@ -54,6 +56,7 @@ function render() {
     
     wall.controlWall();
 
+    rocket.updatePosition(player);
     renderer.render(scene, camera);    
 }
 
