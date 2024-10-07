@@ -15,52 +15,41 @@ class Player {
         if(!this.model) return;
 
         // Controla o movimento para cima
-        if(keysPressed['w'] || keysPressed['ArrowUp']) {
-            if (this.model.position.y < this.maxHeight) {
-                // movimento
-                this.model.position.y += 0.1;
-                if(this.model.rotation.x > -1.9){
-                    // inclinação
-                    this.model.rotation.x -= 0.02;
-                }
-            } 
+        if((keysPressed['w'] || keysPressed['ArrowUp']) && this.model.position.y < this.maxHeight) {
+            this.model.position.y += 0.1;
+            if(this.model.rotation.x > -1.9){
+                // inclinação
+                this.model.rotation.x -= 0.02;
+            }
         } else if(this.model.rotation.x < -1.57){
             this.model.rotation.x += 0.05;
         }
         
         // Controla o movimento para baixo
-        if(keysPressed['s'] || keysPressed['ArrowDown']) {
-            if (this.model.position.y > this.minHeight) {
-                this.model.position.y -= 0.1;
-                if(this.model.rotation.x < -1.2){
-                    this.model.rotation.x += 0.02;
-                }
+        if((keysPressed['s'] || keysPressed['ArrowDown']) && this.model.position.y > this.minHeight) {
+            this.model.position.y -= 0.1;
+            if(this.model.rotation.x < -1.2){
+                this.model.rotation.x += 0.02;
             }
         } else if(this.model.rotation.x > -1.57){
             this.model.rotation.x -= 0.05;
         }
 
         // Controla o movimento para esquerda
-        if(keysPressed['a'] || keysPressed['ArrowLeft']) {
-            if (this.model.position.x < this.maxWidthVariation){
-                this.model.position.x += 0.1;
-                if(this.model.rotation.y < 0.3){
-                    this.model.rotation.y += 0.02;
-                }
-            }    
-        } else {
-            if(this.model.rotation.y > 0){
-                this.model.rotation.y -= 0.05;
+        if((keysPressed['a'] || keysPressed['ArrowLeft']) && this.model.position.x < this.maxWidthVariation) {
+            this.model.position.x += 0.1;
+            if(this.model.rotation.y < 0.3){
+                this.model.rotation.y += 0.02;
             }
+        } else if(this.model.rotation.y > 0){
+            this.model.rotation.y -= 0.05;
         }
 
         // Controla o movimento para direita
-        if(keysPressed['d'] || keysPressed['ArrowRight']) {
-            if (this.model.position.x > -this.maxWidthVariation){
-                this.model.position.x -= 0.1;
-                if(this.model.rotation.y > -0.3){
-                    this.model.rotation.y -= 0.02;
-                }
+        if((keysPressed['d'] || keysPressed['ArrowRight']) && this.model.position.x > -this.maxWidthVariation) {
+            this.model.position.x -= 0.1;
+            if(this.model.rotation.y > -0.3){
+                this.model.rotation.y -= 0.02;
             }
         } else if(this.model.rotation.y < 0){
             this.model.rotation.y += 0.05;
