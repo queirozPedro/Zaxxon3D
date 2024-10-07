@@ -28,7 +28,7 @@ class Ground {
 
     // Função para mover a textura do chão
     update(deltaTime) {
-        this.groundMaterial.map.offset.y -= deltaTime * 0.5;  // Ajuste a velocidade aqui
+        this.groundMaterial.map.offset.y -= deltaTime * 1;  // Ajuste a velocidade aqui
     }
 }
 

@@ -4,18 +4,28 @@ class Wall {
     constructor(scene) {
         this.scene = scene;
         this.wall = []
-        const geometry = new THREE.BoxGeometry(7, 4, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        this.generateWall(geometry, material) 
+        this.load()
     }  
 
+    load() {
+        const geometry = new THREE.BoxGeometry(6, 4, 0.5);
+        const loader = new THREE.TextureLoader();
+        const texture = loader.load('/src/assets/textures/texturaParede.png');
+        const material = new THREE.MeshBasicMaterial( {map: texture} );
+        this.generateWall(geometry, material) 
+    }
+
     generateWall(geometry, material){
-        for(let i = -1 ; i < 1; i++){
-            for(let j = 0; j < 2; j++){
-                const wallSegment = new THREE.Mesh(geometry, material);
-                wallSegment.position.set(i, j + 2, 250);
-                this.scene.add(wallSegment)
-                this.wall.push(wallSegment)
+        for(let i = -12 ; i <= 12; i += 6){
+            for(let j = 2; j <= 10; j += 4){
+                if(!(i == 0 && j == 10)){
+                    if(!(i == -6 && j == 10)){    
+                        const wallSegment = new THREE.Mesh(geometry, material);
+                        wallSegment.position.set(i, j, 260);
+                        this.scene.add(wallSegment)
+                        this.wall.push(wallSegment)
+                    }
+                }
             }
         }
     }
@@ -30,7 +40,7 @@ class Wall {
     }
 
     moveForward(i){
-        this.wall[i].position.z -= 1;
+        this.wall[i].position.z -= 0.25;
     }
 
     destroyOutBounds(i){
