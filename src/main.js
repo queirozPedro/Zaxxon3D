@@ -22,11 +22,13 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0);
 controls.update();
 
+
 // Criação do jogador, o chão e a torreta
 const player = new Player(scene);
 const ground = new Ground(scene);
 const wall = new Wall(scene)
 // const rocket = new Rocket(scene)
+const turret = new Turret(scene);
 
 // Luz Ambiente
 const light = new THREE.AmbientLight(0xffffff, 3);
@@ -55,6 +57,7 @@ function render() {
     ground.update(deltaTime);
     wall.controlWall();
     // rocket.updatePosition(player);
+    turret.update(deltaTime); // Atualiza a torreta com o tempo decorrido
 
     renderer.render(scene, camera);    
 }
