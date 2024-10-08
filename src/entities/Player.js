@@ -10,6 +10,10 @@ class Player {
         this.load();  // Chama o método de carregamento do modelo
     }
 
+    update(keysPressed){
+        this.movementControls(keysPressed)
+    }
+
     movementControls(keysPressed) {
         // impede que o modelo seja referenciado sem nem existir
         if(!this.model) return;

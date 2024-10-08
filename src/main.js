@@ -13,6 +13,10 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+const textureLoader = new THREE.TextureLoader();
+const background = textureLoader.load('/src/assets/textures/background.png');
+scene.background = background;
+
 // Ajustando a câmera para a perspectiva do Zaxxon
 camera.position.set(-12, 19, -17);
 camera.lookAt(0, 0, 0);
@@ -28,7 +32,7 @@ const player = new Player(scene);
 const ground = new Ground(scene);
 const wall = new Wall(scene)
 // const rocket = new Rocket(scene)
-const turret = new Turret(scene);
+// const turret = new Turret(scene);
 
 // Luz Ambiente
 const light = new THREE.AmbientLight(0xffffff, 3);
@@ -50,14 +54,14 @@ const clock = new THREE.Clock();
 function render() {
     requestAnimationFrame(render);
 
-    // Calcula o tempo entre frames
+    // Calcula o tempo entre frames 
     const deltaTime = clock.getDelta();
 
-    player.movementControls(keysPressed);
+    player.update(keysPressed);
     ground.update(deltaTime);
-    wall.controlWall();
+    wall.update();
     // rocket.updatePosition(player);
-    turret.update(deltaTime); // Atualiza a torreta com o tempo decorrido
+    // turret.update(deltaTime);
 
     renderer.render(scene, camera);    
 }

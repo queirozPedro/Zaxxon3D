@@ -30,7 +30,7 @@ class Wall {
         }
     }
 
-    controlWall(){
+    update(){
         for(let i = 0; i < this.wall.length; i++){
             if(this.wall[i]){
                 this.moveForward(i)
