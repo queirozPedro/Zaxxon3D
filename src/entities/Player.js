@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 class Player {
@@ -7,11 +8,13 @@ class Player {
         this.minHeight = 0.4; // Altura mínima (limite do chão)
         this.maxHeight = 10;    // Altura máxima (limite superior)
         this.maxWidthVariation = 13.5; // Limites de movimentação lateral
+        this.projectiles = []
         this.load();  // Chama o método de carregamento do modelo
     }
 
     update(keysPressed){
         this.movementControls(keysPressed)
+        this.shootUpdate()
     }
 
     movementControls(keysPressed) {
@@ -58,11 +61,34 @@ class Player {
         } else if(this.model.rotation.y < 0){
             this.model.rotation.y += 0.05;
         }
+
+        if(keysPressed[' '] || keysPressed['Enter']){
+            this.shoot()
+        }
         
     }
 
+    shoot(){
+        const geometry = new THREE.BoxGeometry(0.2, 0.3, 0.2)
+        const material = new THREE.MeshBasicMaterial({ color: 0xf0c016 })
+        const projectile = new THREE.Mesh( geometry, material)
+
+        if(this.model){
+            projectile.position.copy(this.model.position)
+            projectile.rotation.copy(this.model.rotation)
+            this.projectiles.push(projectile)
+            this.scene.add(projectile)
+        }
+    }
+
+    shootUpdate(){
+        for(let i = 0; i < this.projectiles.length; i++){
+            this.projectiles[i].position.z += 0.5
+        }
+    }
+
     load() {
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader();    
     
         loader.load(
             // Caminho correto para o modelo
