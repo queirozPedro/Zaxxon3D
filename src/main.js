@@ -43,6 +43,9 @@ scene.add(light);
 const keysPressed = {};
 window.addEventListener('keydown', (event) => {
     keysPressed[event.key] = true;
+    if(keysPressed[' '] || keysPressed['Enter']){
+        player.shoot()
+    }
 });
 window.addEventListener('keyup', (event) => {
     keysPressed[event.key] = false;

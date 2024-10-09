@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import Bullet from '../entities/Bullet.js'
 
 class Player {
     constructor(scene) {
@@ -8,13 +9,16 @@ class Player {
         this.minHeight = 0.4; // Altura mínima (limite do chão)
         this.maxHeight = 10;    // Altura máxima (limite superior)
         this.maxWidthVariation = 13.5; // Limites de movimentação lateral
-        this.projectiles = []
+        this.bullets = []
         this.load();  // Chama o método de carregamento do modelo
     }
 
     update(keysPressed){
         this.movementControls(keysPressed)
-        this.shootUpdate()
+        
+        for(let i = 0; i < this.bullets.length; i++){
+            this.bullets[i].update()
+        }
     }
 
     movementControls(keysPressed) {
@@ -61,30 +65,12 @@ class Player {
         } else if(this.model.rotation.y < 0){
             this.model.rotation.y += 0.05;
         }
-
-        if(keysPressed[' '] || keysPressed['Enter']){
-            this.shoot()
-        }
         
     }
 
     shoot(){
-        const geometry = new THREE.BoxGeometry(0.2, 0.3, 0.2)
-        const material = new THREE.MeshBasicMaterial({ color: 0xf0c016 })
-        const projectile = new THREE.Mesh( geometry, material)
-
-        if(this.model){
-            projectile.position.copy(this.model.position)
-            projectile.rotation.copy(this.model.rotation)
-            this.projectiles.push(projectile)
-            this.scene.add(projectile)
-        }
-    }
-
-    shootUpdate(){
-        for(let i = 0; i < this.projectiles.length; i++){
-            this.projectiles[i].position.z += 0.5
-        }
+        const bullet = new Bullet(this.scene, this.model.position, this.model.rotation)
+        this.bullets.push(bullet)
     }
 
     load() {
