@@ -29,7 +29,7 @@ const background = new Background(scene, 8);
 const player = new Player(scene);
 const ground = new Ground(scene);
 const wall = new Wall(scene)
-// const turret = new Turret(scene);
+const turret = new Turret(scene, 3.2);
 // const rocket = new Rocket(scene)
 
 // Luz Ambiente
@@ -63,7 +63,7 @@ function animate() {
     ground.update(deltaTime);
     wall.update();
     background.update();
-    // turret.update(deltaTime);
+    turret.update(deltaTime);
     // rocket.updatePosition(player);
     
     renderer.render(scene, camera);    
