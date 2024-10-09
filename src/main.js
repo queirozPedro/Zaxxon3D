@@ -25,12 +25,12 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0);
 controls.update();
 
-const background = new Background(scene, 10);
+const background = new Background(scene, 8);
 const player = new Player(scene);
 const ground = new Ground(scene);
 const wall = new Wall(scene)
-// const rocket = new Rocket(scene)
 // const turret = new Turret(scene);
+// const rocket = new Rocket(scene)
 
 // Luz Ambiente
 const light = new THREE.AmbientLight(0xffffff, 3);
@@ -52,25 +52,21 @@ window.addEventListener('keyup', (event) => {
 // Relógio que será usado para medir o deltaTime
 const clock = new THREE.Clock();
 
-function render() {
-    requestAnimationFrame(render);
-
+// Função animate, que executa a cada quadro (parecida com o método Update do Unity)
+function animate() {
+    requestAnimationFrame(animate);
+    
     // Calcula o tempo entre frames 
     const deltaTime = clock.getDelta();
-
+    
     player.update(keysPressed);
     ground.update(deltaTime);
     wall.update();
     background.update();
-    // rocket.updatePosition(player);
     // turret.update(deltaTime);
-
+    // rocket.updatePosition(player);
+    
     renderer.render(scene, camera);    
-}
-
-// Função animate, que executa a cada quadro (parecida com o método Update do Unity)
-function animate() {
-    render();
 }
 
 // Iniciar a animação

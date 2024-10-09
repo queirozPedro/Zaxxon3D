@@ -9,21 +9,23 @@ class Background{
     
     start(){
         this.models = []
-        this.rotation = []
+        this.rotationX = []
+        this.rotationY = []
+        this.rotationZ = []
 
         for(let i = 0; i < this.numberLayers; i++){
             this.load();
-            this.rotation.push(Math.random() / 10000);
-            this.rotation.push(Math.random() / 10000);
-            this.rotation.push(Math.random() / 10000);    
+            this.rotationX.push(((Math.random() * 2) - 1) / 10000);
+            this.rotationY.push(((Math.random() * 2) - 1) / 10000);
+            this.rotationZ.push(((Math.random() * 2) - 1) / 10000);    
         }
     }
 
     update(){
         for(let i = 0; i < this.models.length; i++){
-            this.models[i].rotation.x += this.rotation[i + 0]
-            this.models[i].rotation.y += this.rotation[i + 1]
-            this.models[i].rotation.z += this.rotation[i + 2]
+            this.models[i].rotation.x += this.rotationX[i]
+            this.models[i].rotation.y += this.rotationY[i]
+            this.models[i].rotation.z += this.rotationZ[i]
         }
     }
 
@@ -37,7 +39,7 @@ class Background{
             (gltf) => {
                 this.scene.add(gltf.scene);
                 const model = gltf.scene.children[0];
-                model.scale.set(Math.random() + this.numberLayers, Math.random()+ this.numberLayers, Math.random() + this.numberLayers);
+                model.scale.set((Math.random() * this.numberLayers) + 5, (Math.random() * this.numberLayers) + 5, (Math.random() * this.numberLayers) + 5);
                 model.position.set(0, 0, 100);
                 model.rotation.set(Math.random(), Math.random(), Math.random())
                 this.models.push(model)

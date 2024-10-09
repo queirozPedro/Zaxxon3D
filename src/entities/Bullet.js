@@ -1,8 +1,9 @@
 import * as THREE from 'three'
 
 class Bullet{
-    constructor(scene, playerPosition, playerRotation){
+    constructor(scene, playerPosition, playerRotation, enemyBullet){
         this.scene = scene
+        this.enemyBullet = enemyBullet
         this.sceneZLimit = 260 // Será usado para limitar a distância da bullet
         this.load(playerPosition, playerRotation)
     }
@@ -20,7 +21,17 @@ class Bullet{
     }
 
     update(){
-        this.bullet.position.z += 0.5
+        if(this.bullet){
+            this.bullet.position.z += 0.5
+            this.destroyOutBounds();
+        }
+    }
+
+    destroyOutBounds(){
+        if(this.bullet.position.z > 260){
+            this.scene.remove(this.bullet)
+            this.bullet = null;
+        }
     }
 }
 
