@@ -10,7 +10,7 @@ class Wall {
     load() {
         const geometry = new THREE.BoxGeometry(6, 4, 0.5);
         const loader = new THREE.TextureLoader();
-        const texture = loader.load('/src/assets/textures/texturaParede.png');
+        const texture = loader.load('/src/assets/textures/wallTexture.png');
         const material = new THREE.MeshBasicMaterial( {map: texture} );
         this.generateWall(geometry, material) 
     }

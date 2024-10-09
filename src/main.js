@@ -1,21 +1,20 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 import Player from './entities/Player.js';
 import Turret from './entities/Turret.js';
 import Wall from './entities/Wall.js';
 import Ground from './entities/Ground.js';
 import Rocket from './entities/Rocket.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import Background from './entities/Background.js';
+
 
 // Cena, câmera e renderizador
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-
-const textureLoader = new THREE.TextureLoader();
-const background = textureLoader.load('/src/assets/textures/background.png');
-scene.background = background;
 
 // Ajustando a câmera para a perspectiva do Zaxxon
 camera.position.set(-12, 19, -17);
@@ -26,8 +25,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0);
 controls.update();
 
-
-// Criação do jogador, o chão e a torreta
+const background = new Background(scene, 10);
 const player = new Player(scene);
 const ground = new Ground(scene);
 const wall = new Wall(scene)
@@ -63,6 +61,7 @@ function render() {
     player.update(keysPressed);
     ground.update(deltaTime);
     wall.update();
+    background.update();
     // rocket.updatePosition(player);
     // turret.update(deltaTime);
 
