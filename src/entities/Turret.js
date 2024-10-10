@@ -3,9 +3,10 @@ import * as THREE from 'three';
 import Bullet from '../entities/Bullet.js';
 
 class Turret {
-    constructor(scene, direction) {
+    constructor(scene, direction, position) {
         this.scene = scene
         this.direction = direction
+        this.position = position
         this.model = null;
         this.bullets = [];
 
@@ -24,8 +25,8 @@ class Turret {
             (gltf) => {
                 this.model = gltf.scene;
                 this.model.scale.set(2, 2, 2);
-                this.model.position.set(0, 0.7, 70);
-                this.model.rotation.y = this.direction;
+                this.model.position.set(this.position.x, this.position.y, this.position.z);
+                this.model.rotation.y = this.direction * 1.6;
                 this.scene.add(this.model);
             },
             undefined,
@@ -52,7 +53,7 @@ class Turret {
         this.lastShootTime += deltaTime;
 
         if (this.lastShootTime >= this.shootInterval / 1000) {
-            const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, false, this.direction)
+            const bullet = new Bullet(this.scene, this.model.position, false, this.direction)
             this.bullets.push(bullet)
             this.lastShootTime = 0;
         }

@@ -68,7 +68,7 @@ class Player {
     }
 
     shoot(){
-        const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, true, 0)
+        const bullet = new Bullet(this.scene, this.model.position, true, 0)
         this.bullets.push(bullet)
     }
 
@@ -76,7 +76,6 @@ class Player {
         const loader = new GLTFLoader();    
     
         loader.load(
-            // Caminho correto para o modelo
             '/src/assets/models/spaceship/scene.gltf',  // Corrigido
     
             // Chamado quando o recurso é carregado
