@@ -77,7 +77,7 @@ class Player {
     }
 
     shoot() {
-        const bullet = new Bullet(this.scene, this.model.position, true, 0)
+        const bullet = new Bullet(this.scene, this.model.position, true, 90)
         this.bullets.push(bullet)
     }
 

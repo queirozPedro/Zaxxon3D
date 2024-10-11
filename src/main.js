@@ -28,7 +28,7 @@ controls.update();
 const background = new Background(scene, 8);
 const player = new Player(scene);
 const ground = new Ground(scene);
-const turret = new Turret(scene, 4, {x:0, y:0.7, z:160});
+const turret = new Turret(scene, 90, {x:0, y:0, z:260});
 // const wall = new Wall(scene)
 // const rocket = new Rocket(scene)
 

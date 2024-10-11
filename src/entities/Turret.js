@@ -25,8 +25,8 @@ class Turret {
             (gltf) => {
                 this.model = gltf.scene;
                 this.model.scale.set(2, 2, 2);
-                this.model.position.set(this.position.x, this.position.y, this.position.z);
-                this.model.rotation.y = this.direction * 1.6;
+                this.model.position.set(this.position.x, this.position.y + 1.3, this.position.z);
+                this.model.rotation.y = this.direction * (Math.PI/180);
                 this.scene.add(this.model);
             },
             undefined,
@@ -43,6 +43,9 @@ class Turret {
 
             // Quando a torreta sair dos limites, reseta a posição
             if (this.model.position.z < -40) {
+                for(let i = 0; i < this.bullets.length; i++){
+                    this.scene.remove(this.bullets[i].destroy())
+                }
                 this.scene.remove(this.model)
                 this.model = null
             }

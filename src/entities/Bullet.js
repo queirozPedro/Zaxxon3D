@@ -12,7 +12,11 @@ class Bullet{
     }
 
     create(spawnPosition){
-        const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+        const geometry = new THREE.BoxGeometry(
+            (this.direction / 90) % 2 != 0? 0.2 : 0.8, 
+            0.2, 
+            (this.direction / 90) % 2 == 0? 0.2 : 0.8
+        );
         const color = this.isPlayerBullet? 0x00fffff: 0xff0000;
         const material = new THREE.MeshBasicMaterial({ color: color });
         this.bullet = new THREE.Mesh(geometry, material)
@@ -28,14 +32,14 @@ class Bullet{
                 this.bullet.position.z += 0.5
             }
             else{
-                if(this.direction == 1){
+                if(this.direction == 90){
                     this.bullet.position.z -= 0.5
-                } else if(this.direction == 2){
+                } else if(this.direction == 180){
                     this.bullet.position.x -= 0.5
                     this.bullet.position.z -= 0.25
-                } else if(this.direction == 3){
+                } else if(this.direction == 270){
                     this.bullet.position.z += 0.5
-                } else if(this.direction == 4){
+                } else if(this.direction == 0){
                     this.bullet.position.x += 0.5
                     this.bullet.position.z -= 0.25
                 } 
@@ -48,11 +52,15 @@ class Bullet{
         if(this.bullet.position.z < this.mimZLimit || this.bullet.position.z > this.maxZLimit){
             this.scene.remove(this.bullet)
             this.bullet = null;
-        }
-        if(this.bullet.position.x < -this.xLimitVariation || this.bullet.position.x > this.xLimitVariation){
+        } else if(this.bullet.position.x < -this.xLimitVariation || this.bullet.position.x > this.xLimitVariation){
             this.scene.remove(this.bullet)
             this.bullet = null;
         }
+    }
+
+    destroy(){
+        this.scene.remove(this.bullet)
+        this.bullet = null;
     }
 }
 
