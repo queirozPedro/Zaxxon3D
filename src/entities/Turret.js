@@ -56,7 +56,7 @@ class Turret {
         this.lastShootTime += deltaTime;
 
         if (this.lastShootTime >= this.shootInterval / 1000) {
-            const bullet = new Bullet(this.scene, this.model.position, false, this.direction)
+            const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, this.direction, false)
             this.bullets.push(bullet)
             this.lastShootTime = 0;
         }

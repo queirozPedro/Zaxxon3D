@@ -28,7 +28,7 @@ controls.update();
 const background = new Background(scene, 8);
 const player = new Player(scene);
 const ground = new Ground(scene);
-const turret = new Turret(scene, 90, {x:0, y:0, z:260});
+const turret = new Turret(scene, 70, {x:0, y:0, z:90});
 // const wall = new Wall(scene)
 // const rocket = new Rocket(scene)
 
@@ -59,7 +59,7 @@ function animate() {
     player.update(keysPressed);
     ground.update(deltaTime);
     background.update(); 
-    turret.update(deltaTime);
+    // turret.update(deltaTime);
     // wall.update();
     // rocket.updatePosition(player);
     
