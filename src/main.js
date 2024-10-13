@@ -28,16 +28,14 @@ controls.update();
 const background = new Background(scene, 8);
 const ground = new Ground(scene);
 const player = new Player(scene);
-const wall = new Wall(scene, 130)
+const wall = new Wall(scene, 130);
 const turret = new Turret(scene, 70, {x:0, y:0, z:90});
 
 // Luz Ambiente
 const light = new THREE.AmbientLight(0xffffff, 3);
-light.position.set(0, 20, 0);
 scene.add(light);
 
-
-// Um dicionario que atribui true para as teclas que estão pressionadas no momento
+// Dicionário que atribui true para as teclas que estão pressionadas
 const keysPressed = {};
 window.addEventListener('keydown', (event) => {
     keysPressed[event.key] = true;
@@ -46,17 +44,23 @@ window.addEventListener('keyup', (event) => {
     keysPressed[event.key] = false;
 });
 
-
 // Relógio que será usado para medir o deltaTime
 const clock = new THREE.Clock();
 
-// Função animate, que executa a cada quadro (parecida com o método Update do Unity)
 function animate() {
     requestAnimationFrame(animate);
-    
+    console.log("Animating..."); // Para depuração
+
     // Calcula o tempo entre frames 
     const deltaTime = clock.getDelta();
-    
+
+    // Atualiza o player
+    player.update(keysPressed, wall.wall);
+
+    // Verifica colisões e reinicia se necessário
+    if (player.checkCollision(wall.wall)) {
+        resetGame();
+    }
 
     player.update(keysPressed);
     ground.update(deltaTime);
@@ -67,5 +71,12 @@ function animate() {
     renderer.render(scene, camera);    
 }
 
-// Iniciar a animação
+// Função para reiniciar o jogo
+function resetGame() {
+    player.reset(); // Reinicia o jogador
+    wall.reset();   // Reinicia as paredes
+    // Adicione mais lógica de reinício aqui, se necessário
+}
+
+// Inicia a animação
 animate();

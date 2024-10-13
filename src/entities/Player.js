@@ -1,23 +1,24 @@
+import * as THREE from 'three'; // Importa tudo da biblioteca Three.js
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import Bullet from '../entities/Bullet.js'
+import Bullet from '../entities/Bullet.js';
 
 class Player {
     constructor(scene) {
         this.model = null;
         this.scene = scene;
         this.minHeight = 0.4; // Altura mínima (limite do chão)
-        this.maxHeight = 10;    // Altura máxima (limite superior)
+        this.maxHeight = 10;   // Altura máxima (limite superior)
         this.maxWidthVariation = 13.5; // Limites de movimentação lateral
-        this.bullets = []
-        this.isShooting = false
-        this.load();  // Chama o método de carregamento do modelo
+        this.bullets = [];
+        this.isShooting = false;
+        this.load(); // Chama o método de carregamento do modelo
     }
 
-    update(keysPressed) {
-        this.movementControls(keysPressed)
+    update(keysPressed, walls) {
+        this.movementControls(keysPressed);
 
         for (let i = 0; i < this.bullets.length; i++) {
-            this.bullets[i].update()
+            this.bullets[i].update();
         }
     }
 
@@ -29,8 +30,7 @@ class Player {
         if ((keysPressed['w'] || keysPressed['ArrowUp']) && this.model.position.y < this.maxHeight) {
             this.model.position.y += 0.1;
             if (this.model.rotation.x > -1.9) {
-                // inclinação
-                this.model.rotation.x -= 0.02;
+                this.model.rotation.x -= 0.02; // Inclinação
             }
         } else if (this.model.rotation.x < -1.57) {
             this.model.rotation.x += 0.05;
@@ -46,9 +46,9 @@ class Player {
             this.model.rotation.x -= 0.05;
         }
 
-        // Controla o movimento para esquerda
+        // Controla o movimento para a esquerda
         if ((keysPressed['a'] || keysPressed['ArrowLeft']) && this.model.position.x < this.maxWidthVariation) {
-            this.model.position.x += 0.1;
+            this.model.position.x += 0.1; // Corrigido: alterado para posição.x
             if (this.model.rotation.y < 0.3) {
                 this.model.rotation.y += 0.02;
             }
@@ -56,9 +56,9 @@ class Player {
             this.model.rotation.y -= 0.05;
         }
 
-        // Controla o movimento para direita
+        // Controla o movimento para a direita
         if ((keysPressed['d'] || keysPressed['ArrowRight']) && this.model.position.x > -this.maxWidthVariation) {
-            this.model.position.x -= 0.1;
+            this.model.position.x -= 0.1; // Corrigido: alterado para posição.x
             if (this.model.rotation.y > -0.3) {
                 this.model.rotation.y -= 0.02;
             }
@@ -66,46 +66,68 @@ class Player {
             this.model.rotation.y += 0.05;
         }
 
+        // Controle de tiro
         if (keysPressed[' '] || keysPressed['Enter']) {
             if (!this.isShooting) {
-                this.shoot()
+                this.shoot();
                 this.isShooting = true;
             }
         } else {
-            this.isShooting = false
+            this.isShooting = false;
         }
     }
 
     shoot() {
-        const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, 90, 0, true)
-        this.bullets.push(bullet)
+        const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, 90, 0, true);
+        this.bullets.push(bullet);
     }
 
     load() {
         const loader = new GLTFLoader();
 
         loader.load(
-            '/src/assets/models/spaceship/scene.gltf',  // Corrigido
+            '/src/assets/models/spaceship/scene.gltf',
 
-            // Chamado quando o recurso é carregado
             (gltf) => {
                 this.scene.add(gltf.scene);
                 this.model = gltf.scene.children[0];
-                this.model.position.set(0, 2, 0)
+                this.model.position.set(0, 2, 0);
                 this.model.scale.set(0.8, 1, 0.8);
             },
 
-            // Progresso do carregamento
             (xhr) => {
                 console.log((xhr.loaded / xhr.total * 100) + '% loaded');
             },
 
-            // Chamado quando ocorre um erro no carregamento
             (error) => {
                 console.error('Erro ao carregar o modelo:', error);
             }
         );
     }
+
+    checkCollision(walls) {
+        for (const wall of walls) {
+            if (wall) {
+                // Verifica colisão com a parede
+                const playerBox = new THREE.Box3().setFromObject(this.model);
+                const wallBox = new THREE.Box3().setFromObject(wall);
+                if (playerBox.intersectsBox(wallBox)) {
+                    return true; // Colidiu
+                }
+            }
+        }
+        return false; // Não colidiu
+    }
+
+    reset() {
+        // Reset the player's position if needed
+        if (this.model) {
+            this.model.position.set(0, 2, 0); // Reseta para a posição inicial
+            this.model.rotation.set(0, 0, 0); // Reseta a rotação
+        }
+        this.bullets = []; // Limpa as balas
+    }
 }
 
+// Exportação padrão
 export default Player;
