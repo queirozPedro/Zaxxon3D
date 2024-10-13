@@ -12,7 +12,7 @@ class Turret {
 
         this.shootInterval = 1000; // Intervalo de disparo (milissegundos)
         this.lastShootTime = 0;
-        this.speed = 0.25; // Velocidade de movimento da torreta
+        this.ZSpeed = 0.25; // Velocidade de movimento da torreta
 
         this.loadModel();
     }
@@ -39,16 +39,8 @@ class Turret {
     // Movimenta a torreta para acompanhar as paredes
     moveTurret() {
         if (this.model) {
-            this.model.position.z -= this.speed; // Move a torreta no eixo Z
-
-            // Quando a torreta sair dos limites, reseta a posição
-            if (this.model.position.z < -40) {
-                for(let i = 0; i < this.bullets.length; i++){
-                    this.scene.remove(this.bullets[i].destroy())
-                }
-                this.scene.remove(this.model)
-                this.model = null
-            }
+            this.model.position.z -= this.ZSpeed; // Move a torreta no eixo Z
+            this.destroyOutBounds()
         }
     }
 
@@ -56,7 +48,7 @@ class Turret {
         this.lastShootTime += deltaTime;
 
         if (this.lastShootTime >= this.shootInterval / 1000) {
-            const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, this.direction, false)
+            const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, this.direction, this.ZSpeed, false)
             this.bullets.push(bullet)
             this.lastShootTime = 0;
         }
@@ -69,6 +61,17 @@ class Turret {
             for(let i = 0; i < this.bullets.length; i++){
                 this.bullets[i].update()
             }
+        }
+    }
+
+    destroyOutBounds(){
+        // Quando a torreta sair dos limites, reseta a posição
+        if (this.model.position.z < -40) {
+            for(let i = 0; i < this.bullets.length; i++){
+                this.scene.remove(this.bullets[i].destroy())
+            }
+            this.scene.remove(this.model)
+            this.model = null
         }
     }
 }

@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 
 class Wall {
-    constructor(scene) {
+    constructor(scene, positionZ) {
         this.scene = scene;
+        this.positionZ = positionZ;
         this.wall = []
         this.load()
     }  
@@ -21,7 +22,7 @@ class Wall {
                 if(!(i == 0 && j == 10)){
                     if(!(i == -6 && j == 10)){    
                         const wallSegment = new THREE.Mesh(geometry, material);
-                        wallSegment.position.set(i, j, 260);
+                        wallSegment.position.set(i, j, this.positionZ);
                         this.scene.add(wallSegment)
                         this.wall.push(wallSegment)
                     }
@@ -49,6 +50,7 @@ class Wall {
             this.wall[i] = null;
         }
     }
+
 }
 
 export default Wall;
