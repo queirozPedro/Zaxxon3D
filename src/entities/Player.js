@@ -8,13 +8,13 @@ class Player {
         this.scene = scene;
         this.minHeight = 0.4; // Altura mínima (limite do chão)
         this.maxHeight = 10;   // Altura máxima (limite superior)
-        this.maxWidthVariation = 13.5; // Limites de movimentação lateral
+        this.maxWidthVariation = 13.5;  // Limites de movimentação lateral
         this.bullets = [];
         this.isShooting = false;
         this.load(); // Chama o método de carregamento do modelo
     }
 
-    update(keysPressed, walls) {
+    update(keysPressed) {
         this.movementControls(keysPressed);
 
         for (let i = 0; i < this.bullets.length; i++) {
@@ -28,7 +28,7 @@ class Player {
 
         // Controla o movimento para cima
         if ((keysPressed['w'] || keysPressed['ArrowUp']) && this.model.position.y < this.maxHeight) {
-            this.model.position.y += 0.05;
+            this.model.position.y += 0.1;
             if (this.model.rotation.x > -1.9) {
                 this.model.rotation.x -= 0.02;
             }
@@ -38,7 +38,7 @@ class Player {
 
         // Controla o movimento para baixo
         if ((keysPressed['s'] || keysPressed['ArrowDown']) && this.model.position.y > this.minHeight) {
-            this.model.position.y -= 0.05;
+            this.model.position.y -= 0.1;
             if (this.model.rotation.x < -1.2) {
                 this.model.rotation.x += 0.02;
             }
@@ -48,7 +48,7 @@ class Player {
 
         // Controla o movimento para a esquerda
         if ((keysPressed['a'] || keysPressed['ArrowLeft']) && this.model.position.x < this.maxWidthVariation) {
-            this.model.position.x += 0.05;
+            this.model.position.x += 0.1;
             if (this.model.rotation.y < 0.3) {
                 this.model.rotation.y += 0.02;
             }
@@ -58,7 +58,7 @@ class Player {
 
         // Controla o movimento para a direita
         if ((keysPressed['d'] || keysPressed['ArrowRight']) && this.model.position.x > -this.maxWidthVariation) {
-            this.model.position.x -= 0.05; 
+            this.model.position.x -= 0.1; 
             if (this.model.rotation.y > -0.3) {
                 this.model.rotation.y -= 0.02;
             }
@@ -93,6 +93,14 @@ class Player {
                 this.model = gltf.scene.children[0];
                 this.model.position.set(0, 2, 0);
                 this.model.scale.set(0.8, 1, 0.8);
+
+                // Configura o modelo para projetar e receber sombras
+                this.model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
             },
 
             (xhr) => {
@@ -108,7 +116,7 @@ class Player {
     checkCollision(walls) {
         for (const wall of walls) {
             if (wall && this.model) {
-                // Verifica colisão com a parede
+                // Verifica a colisão com a parede
                 const playerBox = new THREE.Box3().setFromObject(this.model);
                 const wallBox = new THREE.Box3().setFromObject(wall);
                 if (playerBox.intersectsBox(wallBox)) {
@@ -120,12 +128,13 @@ class Player {
     }
 
     reset() {
-        // Reset the player's position if needed
         if (this.model) {
             this.model.position.set(0, 2, 0); // Reseta para a posição inicial
-            this.model.rotation.set(0, 0, 0); 
+            this.model.position.x = 0;
+            this.model.position.y = 0;
+            this.model.position.z = 0;
         }
-        this.bullets = []; // Limpa as balas
+        // this.bullets = []; // Limpa as balas
     }
 
     destroy(){

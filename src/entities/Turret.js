@@ -28,6 +28,14 @@ class Turret {
                 this.model.position.set(this.position.x, this.position.y + 1.3, this.position.z);
                 this.model.rotation.y = this.direction * (Math.PI/180);
                 this.scene.add(this.model);
+
+                // Configura o modelo para projetar e receber sombras   
+                this.model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
             },
             undefined,
             (error) => {
@@ -46,7 +54,7 @@ class Turret {
 
     shoot(deltaTime) {
         this.lastShootTime += deltaTime;
-
+        
         if (this.lastShootTime >= this.shootInterval / 1000) {
             const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, this.direction, this.ZSpeed, false)
             this.bullets.push(bullet)

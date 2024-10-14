@@ -13,6 +13,10 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
+
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
 document.body.appendChild(renderer.domElement);
 
 // Ajustando a câmera para a perspectiva do Zaxxon
@@ -27,11 +31,18 @@ controls.update();
 // Environment
 const background = new Background(scene, 8);
 const ground = new Ground(scene);
+ground.ground.receiveShadow = true;
 
+// Luz Ambiente e Luz Pontual
+const pointLight = new THREE.PointLight(0xffffff, 10000, 10000);
+pointLight.position.set(0, 100, 0); // luz para iluminar os objetos
+pointLight.castShadow = true;
+pointLight.shadow.mapSize.width = 1024;
+pointLight.shadow.mapSize.height = 1024;
+scene.add(pointLight)
 
-// Luz Ambiente
-const light = new THREE.AmbientLight(0xffffff, 3);
-scene.add(light);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+scene.add(ambientLight);
 
 // Dicionário que atribui true para as teclas que estão pressionadas
 const keysPressed = {};
@@ -58,34 +69,33 @@ function startGame(){
 
 function animate() {
     requestAnimationFrame(animate);
-
-    // Calcula o tempo entre frames 
-    const deltaTime = clock.getDelta();
-
+    
     // Atualiza a cena
     update()
-
-    // Atualiza o Environment
-    ground.update(deltaTime);
-    background.update(); 
-
+    
     renderer.render(scene, camera);    
 }
 
 function update(){
+    // Calcula o tempo entre frames 
+    const deltaTime = clock.getDelta();
+
     // Verifica colisões e reinicia se necessário
     for(let i = 0; i < walls.length; i++){
         if(walls[i].wall){
             walls[i].update()
         }
-        player.update(keysPressed, walls[i].wall);
+        player.update(keysPressed);
         if (player.checkCollision(walls[i].wall)) {
             resetGame();
         }
     }
     for(let i = 0; i < turrets.length; i++){
-        turrets[i].update()
+        turrets[i].update(deltaTime)
     }
+
+    ground.update(deltaTime);
+    background.update(); 
 }
 
 // Função para reiniciar o jogo

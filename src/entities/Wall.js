@@ -12,7 +12,7 @@ class Wall {
         const geometry = new THREE.BoxGeometry(6, 4, 1);
         const loader = new THREE.TextureLoader();
         const texture = loader.load('/src/assets/textures/wallTexture.png');
-        const material = new THREE.MeshBasicMaterial({ map: texture });
+        const material = new THREE.MeshPhongMaterial({ map: texture });
         this.generateWall(geometry, material);
     }
 
@@ -21,6 +21,7 @@ class Wall {
             for(let j = 2; j <= 10; j += 4) {
                 if (!(i === 0 && j === 10) && !(i === -6 && j === 10)) {    
                     const wallSegment = new THREE.Mesh(geometry, material);
+                    wallSegment.receiveShadow = true;
                     wallSegment.position.set(i, j, this.positionZ);
                     this.scene.add(wallSegment);
                     this.wall.push(wallSegment);
