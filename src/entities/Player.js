@@ -1,4 +1,4 @@
-import * as THREE from 'three'; // Importa tudo da biblioteca Three.js
+import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Bullet from '../entities/Bullet.js';
 
@@ -28,9 +28,9 @@ class Player {
 
         // Controla o movimento para cima
         if ((keysPressed['w'] || keysPressed['ArrowUp']) && this.model.position.y < this.maxHeight) {
-            this.model.position.y += 0.1;
+            this.model.position.y += 0.05;
             if (this.model.rotation.x > -1.9) {
-                this.model.rotation.x -= 0.02; // Inclinação
+                this.model.rotation.x -= 0.02;
             }
         } else if (this.model.rotation.x < -1.57) {
             this.model.rotation.x += 0.05;
@@ -38,7 +38,7 @@ class Player {
 
         // Controla o movimento para baixo
         if ((keysPressed['s'] || keysPressed['ArrowDown']) && this.model.position.y > this.minHeight) {
-            this.model.position.y -= 0.1;
+            this.model.position.y -= 0.05;
             if (this.model.rotation.x < -1.2) {
                 this.model.rotation.x += 0.02;
             }
@@ -48,7 +48,7 @@ class Player {
 
         // Controla o movimento para a esquerda
         if ((keysPressed['a'] || keysPressed['ArrowLeft']) && this.model.position.x < this.maxWidthVariation) {
-            this.model.position.x += 0.1; // Corrigido: alterado para posição.x
+            this.model.position.x += 0.05;
             if (this.model.rotation.y < 0.3) {
                 this.model.rotation.y += 0.02;
             }
@@ -58,7 +58,7 @@ class Player {
 
         // Controla o movimento para a direita
         if ((keysPressed['d'] || keysPressed['ArrowRight']) && this.model.position.x > -this.maxWidthVariation) {
-            this.model.position.x -= 0.1; // Corrigido: alterado para posição.x
+            this.model.position.x -= 0.05; 
             if (this.model.rotation.y > -0.3) {
                 this.model.rotation.y -= 0.02;
             }
@@ -107,7 +107,7 @@ class Player {
 
     checkCollision(walls) {
         for (const wall of walls) {
-            if (wall) {
+            if (wall && this.model) {
                 // Verifica colisão com a parede
                 const playerBox = new THREE.Box3().setFromObject(this.model);
                 const wallBox = new THREE.Box3().setFromObject(wall);
@@ -123,9 +123,16 @@ class Player {
         // Reset the player's position if needed
         if (this.model) {
             this.model.position.set(0, 2, 0); // Reseta para a posição inicial
-            this.model.rotation.set(0, 0, 0); // Reseta a rotação
+            this.model.rotation.set(0, 0, 0); 
         }
         this.bullets = []; // Limpa as balas
+    }
+
+    destroy(){
+        if(this.model){
+            this.scene.remove(this.model);
+            this.model = null;
+        }
     }
 }
 

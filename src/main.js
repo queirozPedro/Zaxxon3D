@@ -27,9 +27,7 @@ controls.update();
 // Environment
 const background = new Background(scene, 8);
 const ground = new Ground(scene);
-const player = new Player(scene);
-const wall = new Wall(scene, 130);
-const turret = new Turret(scene, 70, {x:0, y:0, z:90});
+
 
 // Luz Ambiente
 const light = new THREE.AmbientLight(0xffffff, 3);
@@ -47,36 +45,60 @@ window.addEventListener('keyup', (event) => {
 // Relógio que será usado para medir o deltaTime
 const clock = new THREE.Clock();
 
+const player = new Player(scene);
+const walls = []
+const turrets = []
+
+function startGame(){
+    const wall = new Wall(scene, 130);
+    walls.push(wall)
+    const turret = new Turret(scene, 70, {x:0, y:0, z:90});
+    turrets.push(turret)
+}
+
 function animate() {
     requestAnimationFrame(animate);
-    console.log("Animating..."); // Para depuração
 
     // Calcula o tempo entre frames 
     const deltaTime = clock.getDelta();
 
-    // Atualiza o player
-    player.update(keysPressed, wall.wall);
+    // Atualiza a cena
+    update()
 
-    // Verifica colisões e reinicia se necessário
-    if (player.checkCollision(wall.wall)) {
-        resetGame();
-    }
-
-    player.update(keysPressed);
+    // Atualiza o Environment
     ground.update(deltaTime);
     background.update(); 
-    wall.update();
-    turret.update(deltaTime);
 
     renderer.render(scene, camera);    
+}
+
+function update(){
+    // Verifica colisões e reinicia se necessário
+    for(let i = 0; i < walls.length; i++){
+        if(walls[i].wall){
+            walls[i].update()
+        }
+        player.update(keysPressed, walls[i].wall);
+        if (player.checkCollision(walls[i].wall)) {
+            resetGame();
+        }
+    }
+    for(let i = 0; i < turrets.length; i++){
+        turrets[i].update()
+    }
 }
 
 // Função para reiniciar o jogo
 function resetGame() {
     player.reset(); // Reinicia o jogador
-    wall.reset();   // Reinicia as paredes
-    // Adicione mais lógica de reinício aqui, se necessário
+    for(let i = 0; i < walls.length; i++){
+        walls[i].reset()
+    }
+    for(let i = 0; i < turrets.length; i++){
+
+    }
 }
 
-// Inicia a animação
+// Inicia a animação e o jogo
+startGame();
 animate();

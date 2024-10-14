@@ -38,7 +38,7 @@ class Bullet{
     update(){
         if(this.bullet){
             if(this.isPlayerBullet){
-                this.bullet.position.z += 0.7
+                this.bullet.position.z += 0.6
             }
             else{
                 // Esse decréscimo serve para que o tiro acompanhe a velocidade da torreta

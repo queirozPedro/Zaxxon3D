@@ -49,6 +49,13 @@ class Wall {
         }
     }
 
+    destroy(){
+        for(let i = 0; i < this.wall.length; i++){
+            this.scene.remove(this.wall[i]);
+            this.wall[i] = null; // Remove o segmento da parede
+        }
+    }
+
     reset() {
         // Reinicia a posição das paredes
         for (const wall of this.wall) {
