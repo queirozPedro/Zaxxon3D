@@ -11,6 +11,7 @@ class Player {
         this.maxWidthVariation = 13.5;  // Limites de movimentação lateral
         this.bullets = [];
         this.isShooting = false;
+        this.isDestroyed = false;
         this.load(); // Chama o método de carregamento do modelo
     }
 
@@ -113,7 +114,7 @@ class Player {
         );
     }
 
-    checkWallCollision(walls) {
+    wallCollisionCheck(walls) {
         for (const wall of walls) {
             if (wall && this.model) {
                 // Verifica a colisão com a parede
@@ -127,7 +128,7 @@ class Player {
         return false; // Não colidiu
     }
 
-    checkTurretCollison(turret){
+    turretCollisionCheck(turret){
         if(turret.model && this.model){
                 const playerBox = new THREE.Box3().setFromObject(this.model)
                 const turretBox = new THREE.Box3().setFromObject(turret.model)
@@ -149,24 +150,15 @@ class Player {
     }
 
     destroy(){
-        if(this.model){
+        if(this.model && !this.isDestroyed){
             this.scene.remove(this.model);
-
-            // Liberar recursos associados ao modelo
-            this.model.traverse((child) => {
-                if (child.isMesh) {
-                    // Descartar a geometria e o material para liberar memória
-                    child.geometry.dispose();
-
-                    if (Array.isArray(child.material)) {
-                        child.material.forEach((material) => material.dispose());
-                    } else {
-                        child.material.dispose();
-                    }
-                }
-            });
-            
+            /** 
+             * Como não consegui fazer o modelo da nave sumir, apenas fiz ele desaparecer.
+             * Tem um lado bom nisso, os disparos da nave continuam sendo atualizados.
+             */           
+            this.model.visible = false; 
             this.model = null;
+            this.isDestroyed = true;
         }
     }
 }

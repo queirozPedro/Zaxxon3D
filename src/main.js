@@ -6,7 +6,6 @@ import Player from './entities/Player.js';
 import Ground from './entities/Ground.js';
 import Wall from './entities/Wall.js';
 import Turret from './entities/Turret.js';
-import Rocket from './entities/Rocket.js';
 
 // Cena, câmera e renderizador
 const scene = new THREE.Scene();
@@ -63,7 +62,7 @@ const turrets = []
 function startGame(){
     const wall = new Wall(scene, 130);
     walls.push(wall)
-    const turret = new Turret(scene, 70, {x:0, y:0, z:90});
+    const turret = new Turret(scene, 180, {x:0, y:0, z:90});
     turrets.push(turret)
 }
 
@@ -80,26 +79,31 @@ function update(){
     // Calcula o tempo entre frames 
     const deltaTime = clock.getDelta();
 
-    // Verifica colisões e reinicia se necessário
+    player.update(keysPressed);
+    ground.update(deltaTime);
+    background.update(); 
+
     for(let i = 0; i < walls.length; i++){
         if(walls[i].wall){
             walls[i].update()
         }
-        player.update(keysPressed);
-        if (player.checkWallCollision(walls[i].wall)) {
-            endGame();
-        }
-        if(player.checkTurretCollison(turrets[i])){
+        if (player.wallCollisionCheck(walls[i].wall)) {
             endGame();
         }
     }
+    
     for(let i = 0; i < turrets.length; i++){
-        turrets[i].update(deltaTime)
+        if(turrets[i].model){
+            turrets[i].update(deltaTime)
+        }
+        if(player.turretCollisionCheck(turrets[i])){
+            endGame();
+        }
     }
 
-    ground.update(deltaTime);
-    background.update(); 
 }
+
+
 
 // Função para reiniciar o jogo
 function endGame() {
