@@ -86,8 +86,11 @@ function update(){
             walls[i].update()
         }
         player.update(keysPressed);
-        if (player.checkCollision(walls[i].wall)) {
-            resetGame();
+        if (player.checkWallCollision(walls[i].wall)) {
+            endGame();
+        }
+        if(player.checkTurretCollison(turrets[i])){
+            endGame();
         }
     }
     for(let i = 0; i < turrets.length; i++){
@@ -99,14 +102,8 @@ function update(){
 }
 
 // Função para reiniciar o jogo
-function resetGame() {
-    player.reset(); // Reinicia o jogador
-    for(let i = 0; i < walls.length; i++){
-        walls[i].reset()
-    }
-    for(let i = 0; i < turrets.length; i++){
-
-    }
+function endGame() {
+    player.destroy();
 }
 
 // Inicia a animação e o jogo

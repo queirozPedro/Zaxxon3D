@@ -113,7 +113,7 @@ class Player {
         );
     }
 
-    checkCollision(walls) {
+    checkWallCollision(walls) {
         for (const wall of walls) {
             if (wall && this.model) {
                 // Verifica a colisão com a parede
@@ -125,6 +125,17 @@ class Player {
             }
         }
         return false; // Não colidiu
+    }
+
+    checkTurretCollison(turret){
+        if(turret.model && this.model){
+                const playerBox = new THREE.Box3().setFromObject(this.model)
+                const turretBox = new THREE.Box3().setFromObject(turret.model)
+                if(playerBox.intersectsBox(turretBox)){
+                    return true;
+                }
+            }
+        return false;
     }
 
     reset() {
@@ -140,6 +151,21 @@ class Player {
     destroy(){
         if(this.model){
             this.scene.remove(this.model);
+
+            // Liberar recursos associados ao modelo
+            this.model.traverse((child) => {
+                if (child.isMesh) {
+                    // Descartar a geometria e o material para liberar memória
+                    child.geometry.dispose();
+
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach((material) => material.dispose());
+                    } else {
+                        child.material.dispose();
+                    }
+                }
+            });
+            
             this.model = null;
         }
     }
