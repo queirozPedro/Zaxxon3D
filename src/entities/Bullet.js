@@ -57,28 +57,17 @@ class Bullet{
             this.destroy()
         }
     }
-
-    turretCollisionCheck(turret){
-        if(turret.model && this.bullet){
-            const playerBox = new THREE.Box3().setFromObject(this.bullet)
-            const turretBox = new THREE.Box3().setFromObject(turret.model)
-            if(playerBox.intersectsBox(turretBox)){
-                return true;
-            }
-        }
-        return false;
-    }
     
-    wallCollisionCheck(wall){
-        for(const wallSegment of wall){    
-            if(wallSegment && this.bullet){
-                const playerBox = new THREE.Box3().setFromObject(this.bullet)
-                const wallSegmentBox = new THREE.Box3().setFromObject(wallSegment.model)
-                if(playerBox.intersectsBox(wallSegmentBox)){
-                    return true;
+    wallCollisionCheck(walls){
+        for (const wall of walls) {
+            if (wall && this.bullet) {
+                // Verifica a colisão com a parede
+                const bulletBox = new THREE.Box3().setFromObject(this.bullet);
+                const wallBox = new THREE.Box3().setFromObject(wall);
+                if (bulletBox.intersectsBox(wallBox)) {
+                    return true; // Colidiu
                 }
             }
-            return false;
         }
     }
 

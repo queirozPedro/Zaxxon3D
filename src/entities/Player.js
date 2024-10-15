@@ -115,6 +115,11 @@ class Player {
     }
 
     wallCollisionCheck(walls) {
+        for(let i = 0; i < this.bullets.length; i++){
+            if(this.bullets[i].wallCollisionCheck(walls)){
+                this.bullets[i].destroy()
+            }
+        }
         for (const wall of walls) {
             if (wall && this.model) {
                 // Verifica a colisão com a parede

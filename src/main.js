@@ -62,7 +62,7 @@ const turrets = []
 function startGame(){
     const wall = new Wall(scene, 130);
     walls.push(wall)
-    const turret = new Turret(scene, 180, {x:0, y:0, z:90});
+    const turret = new Turret(scene, 270, {x:0, y:0, z:90});
     turrets.push(turret)
 }
 
@@ -79,10 +79,12 @@ function update(){
     // Calcula o tempo entre frames 
     const deltaTime = clock.getDelta();
 
+    // Atualizando o jogador e o environment
     player.update(keysPressed);
     ground.update(deltaTime);
     background.update(); 
 
+    // Checando as colisões e atualizando os muros e torretas
     for(let i = 0; i < walls.length; i++){
         if(walls[i].wall){
             walls[i].update()
@@ -95,6 +97,9 @@ function update(){
     for(let i = 0; i < turrets.length; i++){
         if(turrets[i].model){
             turrets[i].update(deltaTime)
+            for(let i = 0; i < walls.length; i++){
+                turrets[i].wallCollisionCheck(walls[i].wall);
+            }
         }
         if(player.turretCollisionCheck(turrets[i])){
             endGame();

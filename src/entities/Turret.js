@@ -82,6 +82,29 @@ class Turret {
             this.model = null
         }
     }
+    
+    wallCollisionCheck(walls) {
+        for(let i = 0; i < this.bullets.length; i++){
+            if(this.bullets[i].wallCollisionCheck(walls)){
+                this.bullets[i].destroy()
+            }
+        }
+        this.scene.remove(this.bullet)
+        this.bullet = null;
+    }
+
+    turretBulletCollisionCheck(turret) {
+        for(let i = 0; i < this.bullets.length; i++){
+            if(this.bullets[i].turretCollisionCheck(turret)){
+                this.bullets[i].destroy()
+            }
+        }
+    }
+
+    destroy(){
+        this.scene.remove(this.bullet)
+        this.bullet = null;
+    }
 }
 
 export default Turret;
