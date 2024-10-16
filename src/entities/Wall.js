@@ -1,9 +1,11 @@
 import * as THREE from 'three';
 
 class Wall {
-    constructor(scene, positionZ) {
+    constructor(scene, camadas, murosQuebrados, spawnPointZ) {
         this.scene = scene;
-        this.positionZ = positionZ;
+        this.camadas = camadas*4;
+        this.murosQuebrados = murosQuebrados;
+        this.spawnPointZ = spawnPointZ;
         this.wall = [];
         this.load();
     }  
@@ -18,15 +20,16 @@ class Wall {
 
     generateWall(geometry, material) {
         for(let i = -12; i <= 12; i += 6) {
-            for(let j = 2; j <= 10; j += 4) {
-                if (!(i === 0 && j === 10) && !(i === -6 && j === 10)) {    
-                    const wallSegment = new THREE.Mesh(geometry, material);
-                    wallSegment.receiveShadow = true;
-                    wallSegment.position.set(i, j, this.positionZ);
-                    this.scene.add(wallSegment);
-                    this.wall.push(wallSegment);
-                }
+            for(let j = 2; j <= this.camadas; j += 4) {
+                const wallSegment = new THREE.Mesh(geometry, material);
+                wallSegment.receiveShadow = true;
+                wallSegment.position.set(i, j, this.spawnPointZ);
+                this.scene.add(wallSegment);
+                this.wall.push(wallSegment);
             }
+        }
+        for(let i = 0; i < this.murosQuebrados; i++){
+            this.destroySegment(Math.round(Math.random() * this.wall.length))
         }
     }
 
@@ -55,6 +58,11 @@ class Wall {
             this.scene.remove(this.wall[i]);
             this.wall[i] = null; // Remove o segmento da parede
         }
+    }
+
+    destroySegment(i){
+        this.scene.remove(this.wall[i]);
+        this.wall[i] = null;
     }
 
 }

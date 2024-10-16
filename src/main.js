@@ -58,26 +58,45 @@ const clock = new THREE.Clock();
 const player = new Player(scene);
 const walls = []
 const turrets = []
-
-function startGame(){
-    const wall = new Wall(scene, 130);
-    walls.push(wall)
-    const turret = new Turret(scene, 90, {x:0, y:0, z:90});
-    turrets.push(turret)
-}
+let tempoDecorrido = 0
+let intervaloDeTempo = 0;
 
 function animate() {
     requestAnimationFrame(animate);
     
     // Atualiza a cena
     update()
-    
     renderer.render(scene, camera);    
+}
+
+function spawnObjects(){
+    const camadas = 3;
+    const murosQuebrados = Math.round(Math.random() * 2 + 3);
+    const spawnPointZ = 260 + Math.random() * 2;
+    const wall = new Wall(scene, camadas, murosQuebrados, spawnPointZ);
+    walls.push(wall)
+    
+    for(let i = 0; i < 2; i++){
+        const direction = (Math.random() * 18) * 20;
+        const spawnPointX = (Math.random() * 20) - 10;
+        const turret = new Turret(scene, direction , {x:spawnPointX, y:0, z:spawnPointZ + i*7});
+        turrets.push(turret)
+    }
 }
 
 function update(){
     // Calcula o tempo entre frames 
     const deltaTime = clock.getDelta();
+
+    tempoDecorrido += deltaTime;
+
+    if(tempoDecorrido >= intervaloDeTempo){
+        spawnObjects()
+
+        tempoDecorrido = 0;
+
+        intervaloDeTempo = Math.random() * 10 + 1;
+    }
 
     // Atualizando o jogador e o environment
     player.update(keysPressed);
@@ -92,6 +111,7 @@ function update(){
         if (player.wallCollisionCheck(walls[i].wall)) {
             endGame();
         }
+        
     }
     
     for(let i = 0; i < turrets.length; i++){
@@ -101,11 +121,11 @@ function update(){
                 turrets[i].wallCollisionCheck(walls[i].wall);
             }
         }
-        if(player.turretCollisionCheck(turrets[i])){
+        if(player.turretCollisionCheck(turrets[i]) && !turrets[i].getIsDestroyed()){
             endGame();
         }
         if(player.enemyBulletCollisionCheck(turrets[i].model)){
-            turrets[i].destroy()
+            turrets[i].shootDestroy()
         }
         if(turrets[i].enemyBulletCollisionCheck(player.model)){
             endGame();
@@ -119,5 +139,4 @@ function endGame() {
 }
 
 // Inicia a animação e o jogo
-startGame();
 animate();

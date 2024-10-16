@@ -77,6 +77,7 @@ class Bullet{
             const enemyRitBox = new THREE.Box3().setFromObject(enemy);
             const bulletBox = new THREE.Box3().setFromObject(this.bullet);
             if(bulletBox.intersectsBox(enemyRitBox)){
+                this.destroy()
                 return true;
             }
             return false;
