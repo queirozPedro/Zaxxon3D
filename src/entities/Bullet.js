@@ -18,14 +18,15 @@ class Bullet{
         this.bullet = new THREE.Mesh(geometry, material)
         
         this.bullet.position.copy(position)
-        this.bullet.rotation.copy(rotation) 
-
+        
         if(this.isPlayerBullet){
             // Essa é uma solução temporária. A posição e orientação do tiro vão seguir a inclinação da nave
             this.bullet.position.y += 0.5;
             this.bullet.position.z += 2;   
             this.bullet.rotation.z += 270 * (Math.PI/180)
+            this.bullet.rotation.x += 270 * (Math.PI/180)
         } else{
+            this.bullet.rotation.copy(rotation)
             this.ZSpeed = ZSpeed;
             this.bullet.position.x += 1.7 * Math.cos(this.direction * (Math.PI/180))
             this.bullet.position.y += 0.7

@@ -20,7 +20,6 @@ document.body.appendChild(renderer.domElement);
 
 // Ajustando a câmera para a perspectiva do Zaxxon
 camera.position.set(-12, 19, -17);
-camera.lookAt(0, 0, 0);
 
 // Controles orbitais para teste
 const controls = new OrbitControls(camera, renderer.domElement);
