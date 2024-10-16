@@ -21,7 +21,7 @@ class Turret {
         const loader = new GLTFLoader();
 
         loader.load(
-            './assets/models/turret/Rail Gun Turret.gltf',
+            'src/assets/models/turret/Rail Gun Turret.gltf',
             (gltf) => {
                 this.model = gltf.scene;
                 this.model.scale.set(1.2, 1, 1.2);

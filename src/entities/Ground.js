@@ -14,7 +14,7 @@
 
         load() {
             const loader = new THREE.TextureLoader();
-            const texture = loader.load('./assets/textures/ground.png', (texture) => {
+            const texture = loader.load('src/assets/textures/ground.png', (texture) => {
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 20);
