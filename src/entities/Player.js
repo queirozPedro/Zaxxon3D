@@ -79,7 +79,7 @@ class Player {
     }
 
     shoot() {
-        const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, 90, 0, true);
+        const bullet = new Bullet(this.scene, this.model.position, 90, 0, true);
         this.bullets.push(bullet);
     }
 
@@ -87,7 +87,7 @@ class Player {
         const loader = new GLTFLoader();
 
         loader.load(
-            '/src/assets/models/spaceship/scene.gltf',
+            './assets/models/spaceship/scene.gltf',
 
             (gltf) => {
                 this.scene.add(gltf.scene);

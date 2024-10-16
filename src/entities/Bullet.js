@@ -1,17 +1,17 @@
 import * as THREE from 'three'
 
 class Bullet{
-    constructor(scene, position, rotation, direction, ZSpeed, isPlayerBullet){
+    constructor(scene, position, direction, ZSpeed, isPlayerBullet){
         this.scene = scene;
         this.isPlayerBullet = isPlayerBullet;
         this.direction = direction;
         this.maxZLimit = 260;
         this.mimZLimit = -40;
         this.xLimitVariation = 14;
-        this.create(position, rotation, ZSpeed)
+        this.create(position, ZSpeed)
     }
 
-    create(position, rotation, ZSpeed){
+    create(position, ZSpeed){
         const geometry = new THREE.BoxGeometry(0.8, 0.2, 0.2);
         const color = this.isPlayerBullet? 0x00fffff: 0xff0000;
         const material = new THREE.MeshBasicMaterial({ color: color });
