@@ -25,14 +25,14 @@ class Bullet{
             this.bullet.position.z += 2;   
             this.bullet.rotation.z += 270 * (Math.PI/180)
             this.bullet.rotation.x += 270 * (Math.PI/180)
-        } else{
-            this.bullet.rotation.copy(rotation)
+        } else {
             this.ZSpeed = ZSpeed;
-            this.bullet.position.x += 1.7 * Math.cos(this.direction * (Math.PI/180))
-            this.bullet.position.y += 0.7
-            this.bullet.position.z += 1.7 * Math.sin(-this.direction * (Math.PI/180))
+            this.bullet.rotation.y = this.direction * (Math.PI/180)
+            this.bullet.position.x += 3.5 * Math.cos(this.direction * (Math.PI/180))
+            this.bullet.position.y += 2
+            this.bullet.position.z += 3.5 * Math.sin(-this.direction * (Math.PI/180))
         }
-            
+                
         this.scene.add(this.bullet)
     }
 

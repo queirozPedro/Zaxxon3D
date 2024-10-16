@@ -1,5 +1,4 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import * as THREE from 'three';
 import Bullet from '../entities/Bullet.js';
 
 class Turret {
@@ -22,12 +21,12 @@ class Turret {
         const loader = new GLTFLoader();
 
         loader.load(
-            '/src/assets/models/turret/scene.gltf',
+            '/src/assets/models/turret/Rail Gun Turret.gltf',
             (gltf) => {
                 this.model = gltf.scene;
-                this.model.scale.set(2, 2, 2);
-                this.model.position.set(this.position.x, this.position.y + 1.3, this.position.z);
-                this.model.rotation.y = this.direction * (Math.PI/180);
+                this.model.scale.set(1.2, 1, 1.2);
+                this.model.position.set(this.position.x, this.position.y + 0.3, this.position.z);
+                this.model.rotation.y = (this.direction+90) * (Math.PI/180);
                 this.scene.add(this.model);
 
                 // Configura o modelo para projetar e receber sombras   
