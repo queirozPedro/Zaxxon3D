@@ -93,17 +93,23 @@ class Turret {
         this.bullet = null;
     }
 
-    turretBulletCollisionCheck(turret) {
+    enemyBulletCollisionCheck(enemy){
         for(let i = 0; i < this.bullets.length; i++){
-            if(this.bullets[i].turretCollisionCheck(turret)){
-                this.bullets[i].destroy()
+            if(this.bullets[i].enemyCollisionCheck(enemy)){
+                return true;
             }
         }
+        return false;
     }
 
     destroy(){
-        this.scene.remove(this.bullet)
-        this.bullet = null;
+        if (this.model) {
+            for(let i = 0; i < this.bullets.length; i++){
+                this.scene.remove(this.bullets[i].destroy())
+            }
+            this.scene.remove(this.model)
+            this.model = null
+        }
     }
 }
 

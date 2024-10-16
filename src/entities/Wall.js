@@ -57,14 +57,6 @@ class Wall {
         }
     }
 
-    reset() {
-        // Reinicia a posição das paredes
-        for (const wall of this.wall) {
-            if (wall) {
-                wall.position.z = this.positionZ; // Reseta para a posição inicial
-            }
-        }
-    }
 }
 
 export default Wall;

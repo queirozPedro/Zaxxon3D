@@ -69,6 +69,18 @@ class Bullet{
                 }
             }
         }
+        return false;
+    }
+
+    enemyCollisionCheck(enemy){
+        if(enemy && this.bullet){
+            const enemyRitBox = new THREE.Box3().setFromObject(enemy);
+            const bulletBox = new THREE.Box3().setFromObject(this.bullet);
+            if(bulletBox.intersectsBox(enemyRitBox)){
+                return true;
+            }
+            return false;
+        }
     }
 
     destroy(){

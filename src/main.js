@@ -62,7 +62,7 @@ const turrets = []
 function startGame(){
     const wall = new Wall(scene, 130);
     walls.push(wall)
-    const turret = new Turret(scene, 270, {x:0, y:0, z:90});
+    const turret = new Turret(scene, 90, {x:0, y:0, z:90});
     turrets.push(turret)
 }
 
@@ -104,11 +104,14 @@ function update(){
         if(player.turretCollisionCheck(turrets[i])){
             endGame();
         }
+        if(player.enemyBulletCollisionCheck(turrets[i].model)){
+            turrets[i].destroy()
+        }
+        if(turrets[i].enemyBulletCollisionCheck(player.model)){
+            endGame();
+        }
     }
-
 }
-
-
 
 // Função para reiniciar o jogo
 function endGame() {

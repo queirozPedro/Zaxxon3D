@@ -6,7 +6,7 @@ class Player {
     constructor(scene) {
         this.model = null;
         this.scene = scene;
-        this.minHeight = 0.4; // Altura mínima (limite do chão)
+        this.minHeight = 0.8; // Altura mínima (limite do chão)
         this.maxHeight = 10;   // Altura máxima (limite superior)
         this.maxWidthVariation = 13.5;  // Limites de movimentação lateral
         this.bullets = [];
@@ -144,14 +144,13 @@ class Player {
         return false;
     }
 
-    reset() {
-        if (this.model) {
-            this.model.position.set(0, 2, 0); // Reseta para a posição inicial
-            this.model.position.x = 0;
-            this.model.position.y = 0;
-            this.model.position.z = 0;
+    enemyBulletCollisionCheck(enemy){
+        for(let i = 0; i < this.bullets.length; i++){
+            if(this.bullets[i].enemyCollisionCheck(enemy)){
+                return true;
+            }
         }
-        // this.bullets = []; // Limpa as balas
+        return false;
     }
 
     destroy(){
