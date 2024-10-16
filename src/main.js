@@ -79,7 +79,7 @@ function spawnObjects(){
     for(let i = 0; i < 2; i++){
         const direction = (Math.random() * 18) * 20;
         const spawnPointX = (Math.random() * 20) - 10;
-        const turret = new Turret(scene, direction , {x:spawnPointX, y:0, z:spawnPointZ + i*7});
+        const turret = new Turret(scene, direction , {x:spawnPointX, y:0, z:spawnPointZ + (i+1)*15});
         turrets.push(turret)
     }
 }
@@ -95,7 +95,7 @@ function update(){
 
         tempoDecorrido = 0;
 
-        intervaloDeTempo = Math.random() * 10 + 1;
+        intervaloDeTempo = Math.random() * 10 + 5;
     }
 
     // Atualizando o jogador e o environment
