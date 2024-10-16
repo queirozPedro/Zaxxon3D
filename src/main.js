@@ -50,11 +50,11 @@ scene.add(ambientLight);
 // Dicionário que atribui true para as teclas que estão pressionadas
 const keysPressed = {};
 window.addEventListener('keydown', (event) => {
-    keysPressed[event.key] = true;
+    keysPressed[event.key.toLowerCase()] = true;
 });
 // Adiciona false para as teclas que não estão mais apertadas
 window.addEventListener('keyup', (event) => {
-    keysPressed[event.key] = false;
+    keysPressed[event.key.toLowerCase()] = false;
 });
 
 // Relógio que será usado para medir o deltaTime
