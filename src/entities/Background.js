@@ -33,7 +33,7 @@ class Background{
         const loader = new GLTFLoader();    
     
         loader.load(
-            'src/assets/models/background/scene.gltf', 
+            './assets/models/background/scene.gltf', 
     
             // Chamado quando o recurso é carregado
             (gltf) => {

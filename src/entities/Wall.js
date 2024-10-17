@@ -13,7 +13,7 @@ class Wall {
     load() {
         const geometry = new THREE.BoxGeometry(6, 4, 1);
         const loader = new THREE.TextureLoader();
-        const texture = loader.load('src/assets/textures/wallTexture.png');
+        const texture = loader.load('./assets/textures/wallTexture.png');
         const material = new THREE.MeshPhongMaterial({ map: texture });
         this.generateWall(geometry, material);
     }

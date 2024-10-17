@@ -87,7 +87,7 @@ class Player {
         const loader = new GLTFLoader();
 
         loader.load(
-            'src/assets/models/spaceship/scene.gltf',
+            './assets/models/spaceship/scene.gltf',
 
             (gltf) => {
                 this.scene.add(gltf.scene);
