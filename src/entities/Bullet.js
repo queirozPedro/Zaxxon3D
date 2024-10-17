@@ -1,10 +1,11 @@
 import * as THREE from 'three'
 
 class Bullet{
-    constructor(scene, position, direction, ZSpeed, isPlayerBullet){
+    constructor(scene, position, direction, ZSpeed, isPlayerBullet, gameSpeed){
         this.scene = scene;
         this.isPlayerBullet = isPlayerBullet;
         this.direction = direction;
+        this.gameSpeed = gameSpeed;
         this.maxZLimit = 260;
         this.mimZLimit = -40;
         this.xLimitVariation = 14;
@@ -39,13 +40,13 @@ class Bullet{
     update(){
         if(this.bullet){
             if(this.isPlayerBullet){
-                this.bullet.position.z += 0.6
+                this.bullet.position.z += 0.6  * this.gameSpeed;
             }
             else{
                 // Esse decréscimo serve para que o tiro acompanhe a velocidade da torreta
-                this.bullet.position.z -= this.ZSpeed; 
-                this.bullet.position.z += 0.2 * Math.sin(-this.direction * (Math.PI/180));
-                this.bullet.position.x += 0.2 * Math.cos(-this.direction * (Math.PI/180));
+                this.bullet.position.z -= this.ZSpeed * this.gameSpeed; 
+                this.bullet.position.z += 0.2 * Math.sin(-this.direction * (Math.PI/180)) * this.gameSpeed;
+                this.bullet.position.x += 0.2 * Math.cos(-this.direction * (Math.PI/180)) * this.gameSpeed;
             }
             this.destroyOutBounds();
         }

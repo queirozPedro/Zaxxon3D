@@ -1,8 +1,9 @@
     import * as THREE from 'three';
 
     class Ground {
-        constructor(scene) {
+        constructor(scene, gameSpeed) {
             this.load()
+            this.gameSpeed = gameSpeed
             const groundGeometry = new THREE.PlaneGeometry(30, 300);
             this.ground = new THREE.Mesh(groundGeometry, this.groundMaterial);
 
@@ -29,7 +30,7 @@
 
         // Função para mover a textura do chão
         update(deltaTime) {
-            this.groundMaterial.map.offset.y -= deltaTime * 1;  // Ajuste a velocidade aqui
+            this.groundMaterial.map.offset.y -= deltaTime * this.gameSpeed;  // Ajuste a velocidade aqui
         }
     }
 

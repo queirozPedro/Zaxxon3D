@@ -27,8 +27,9 @@ controls.target.set(0, 0, 0);
 controls.update();
 
 // Carrega o chão e o background, e permite ao chão receber sombras
+const gameSpeed = 1.5;
 const background = new Background(scene, 8);
-const ground = new Ground(scene);
+const ground = new Ground(scene, gameSpeed);
 ground.ground.receiveShadow = true;
 
 /**
@@ -60,7 +61,7 @@ window.addEventListener('keyup', (event) => {
 // Relógio que será usado para medir o deltaTime
 const clock = new THREE.Clock();
 
-const player = new Player(scene);
+const player = new Player(scene, gameSpeed);
 const walls = []
 const turrets = []
 let tempoDecorrido = 0
@@ -78,17 +79,17 @@ function animate() {
 /**
  * A função spawnObjects instancia os objetos na cena de maneira quase aleatória
  */
-function spawnObjects(){
+function spawnObjects(gameSpeed){
     const camadas = 3;
     const murosQuebrados = Math.round(Math.random() * 2 + 3);
     const spawnPointZ = 260 + Math.random() * 2;
-    const wall = new Wall(scene, camadas, murosQuebrados, spawnPointZ);
+    const wall = new Wall(scene, camadas, murosQuebrados, spawnPointZ, gameSpeed);
     walls.push(wall)
     
-    for(let i = 0; i < Math.round(Math.random() * 2 + 1); i++){
+    for(let i = 0; i < Math.round(Math.random() * 3 + 1); i++){
         const direction = (Math.random() * 18) * 20;
         const spawnPointX = (Math.random() * 20) - 10;
-        const turret = new Turret(scene, direction , {x:spawnPointX, y:0, z:spawnPointZ + (i+1)*15});
+        const turret = new Turret(scene, direction , {x:spawnPointX, y:0, z:spawnPointZ + (i+1)*40}, gameSpeed);
         turrets.push(turret)
     }
 }
@@ -97,20 +98,21 @@ function spawnObjects(){
 function update(){
     // Calcula o tempo entre frames 
     const deltaTime = clock.getDelta();
+    // Velocidade que as coisas acontecem no jogo
 
     tempoDecorrido += deltaTime;
 
     if(tempoDecorrido >= intervaloDeTempo){
-        spawnObjects()
+        spawnObjects(gameSpeed)
 
         tempoDecorrido = 0;
 
-        intervaloDeTempo = Math.random() * 10 + 5;
+        intervaloDeTempo = (Math.random() * 10 + 5) / gameSpeed;
     }
 
     // Atualizando o jogador e o environment
     player.update(keysPressed);
-    ground.update(deltaTime);
+    ground.update(deltaTime, gameSpeed);
     background.update(); 
 
     // Percorre os muros checando as colisões

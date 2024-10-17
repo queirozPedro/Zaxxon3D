@@ -2,10 +2,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Bullet from '../entities/Bullet.js';
 
 class Turret {
-    constructor(scene, direction, position) {
+    constructor(scene, direction, position, gameSpeed) {
         this.scene = scene
         this.direction = direction
         this.position = position
+        this.gameSpeed = gameSpeed;
         this.model = null;
         this.bullets = [];
 
@@ -47,7 +48,7 @@ class Turret {
     // Movimenta a torreta para acompanhar as paredes
     moveTurret() {
         if (this.model) {
-            this.model.position.z -= this.ZSpeed; // Move a torreta no eixo Z
+            this.model.position.z -= this.ZSpeed * this.gameSpeed; // Move a torreta no eixo Z
             this.destroyOutBounds()
         }
     }
@@ -57,7 +58,7 @@ class Turret {
         
         if(!this.isDestroyed){
             if (this.lastShootTime >= this.shootInterval / 1000) {
-                const bullet = new Bullet(this.scene, this.model.position, this.direction, this.ZSpeed, false)
+                const bullet = new Bullet(this.scene, this.model.position, this.direction, this.ZSpeed, false, this.gameSpeed)
                 this.bullets.push(bullet)
                 this.lastShootTime = 0;
             }

@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 
 class Wall {
-    constructor(scene, camadas, murosQuebrados, spawnPointZ) {
+    constructor(scene, camadas, murosQuebrados, spawnPointZ, gameSpeed) {
         this.scene = scene;
         this.camadas = camadas*4;
         this.murosQuebrados = murosQuebrados;
         this.spawnPointZ = spawnPointZ;
+        this.gameSpeed = gameSpeed;
         this.wall = [];
         this.load();
     }  
@@ -43,7 +44,7 @@ class Wall {
     }
 
     moveForward(i) {
-        this.wall[i].position.z -= 0.25;
+        this.wall[i].position.z -= 0.25 * this.gameSpeed;
     }
 
     destroyOutBounds(i) {
