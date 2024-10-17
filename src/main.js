@@ -67,7 +67,6 @@ const turrets = []
 let tempoDecorrido = 0
 let intervaloDeTempo = 0;
 
-
 function animate() {
     requestAnimationFrame(animate);
     
@@ -87,8 +86,14 @@ function spawnObjects(gameSpeed){
     walls.push(wall)
     
     for(let i = 0; i < Math.round(Math.random() * 2) + 2; i++){
-        const direction = (Math.random() * 18) * 20;
         const spawnPointX = (Math.random() * 20) - 10;
+        let direction = 0
+        if(spawnPointX < 0){
+            direction = (Math.random() * 180) - 90;
+        }
+        else if(spawnPointX > 0){
+            direction = (Math.random() * 180) + 90;
+        }
         const turret = new Turret(scene, direction , {x:spawnPointX, y:0, z:spawnPointZ + (i+1)*40}, gameSpeed);
         turrets.push(turret)
     }
@@ -154,7 +159,6 @@ function update(){
         }
     }
 }
-
 
 // Função para reiniciar o jogo
 function endGame() {

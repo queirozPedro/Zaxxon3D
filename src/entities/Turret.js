@@ -26,7 +26,7 @@ class Turret {
             (gltf) => {
                 this.model = gltf.scene;
                 this.model.scale.set(1.2, 1, 1.2);
-                this.model.position.set(this.position.x, this.position.y + 0.3, this.position.z);
+                this.model.position.set(this.position.x, this.position.y + 0.4, this.position.z);
                 this.model.rotation.y = (this.direction * Math.PI/180) + Math.PI / 2;
                 this.scene.add(this.model);
 
