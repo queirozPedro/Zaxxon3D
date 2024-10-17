@@ -81,12 +81,12 @@ function animate() {
  */
 function spawnObjects(gameSpeed){
     const camadas = 3;
-    const murosQuebrados = Math.round(Math.random() * 2 + 3);
+    const murosQuebrados = Math.round(Math.random() * 3);
     const spawnPointZ = 260 + Math.random() * 2;
     const wall = new Wall(scene, camadas, murosQuebrados, spawnPointZ, gameSpeed);
     walls.push(wall)
     
-    for(let i = 0; i < Math.round(Math.random() * 3 + 1); i++){
+    for(let i = 0; i < Math.round(Math.random() * 2) + 2; i++){
         const direction = (Math.random() * 18) * 20;
         const spawnPointX = (Math.random() * 20) - 10;
         const turret = new Turret(scene, direction , {x:spawnPointX, y:0, z:spawnPointZ + (i+1)*40}, gameSpeed);

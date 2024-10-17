@@ -4,7 +4,7 @@ class Wall {
     constructor(scene, camadas, murosQuebrados, spawnPointZ, gameSpeed) {
         this.scene = scene;
         this.camadas = camadas*4;
-        this.murosQuebrados = murosQuebrados;
+        this.murosQuebrados = murosQuebrados + 2;
         this.spawnPointZ = spawnPointZ;
         this.gameSpeed = gameSpeed;
         this.wall = [];
