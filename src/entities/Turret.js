@@ -115,6 +115,10 @@ class Turret {
     getIsDestroyed(){
         return this.isDestroyed;
     }
+
+    getPositionZ(){
+        return this.model.position.z;
+    }
 }
 
 export default Turret;

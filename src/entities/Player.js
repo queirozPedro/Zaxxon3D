@@ -30,12 +30,12 @@ class Player {
 
         // Controla o movimento para cima
         if ((keysPressed['w'] || keysPressed['ArrowUp']) && this.model.position.y < this.maxHeight) {
-            this.model.position.y += 0.1 * this.gameSpeed;
-            if (this.model.rotation.x > -1.9) {
-                this.model.rotation.x -= 0.02 * this.gameSpeed;
+            this.model.position.y += 0.1 * this.gameSpeed; // Faz virar
+            if (this.model.rotation.x > -1.9) { // Se não estiver no máximo de inclinação 
+                this.model.rotation.x -= 0.02 * this.gameSpeed; // inclina pra cima
             }
-        } else if (this.model.rotation.x < -1.57) {
-            this.model.rotation.x += 0.05 * this.gameSpeed;
+        } else if (this.model.rotation.x < -1.57) { // Se não estiver precionado e estiver inclinado
+            this.model.rotation.x += 0.05 * this.gameSpeed; // faz voltar para a posição normal
         }
 
         // Controla o movimento para baixo
