@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Bullet from '../entities/Bullet.js';
+import CollisionDetector from '../utils/CollisionDetector.js';
 
 class Player {
     constructor(scene, gameSpeed) {
@@ -80,7 +81,7 @@ class Player {
     }
 
     shoot() {
-        const bullet = new Bullet(this.scene, this.model.position, 90, 0, true, this.gameSpeed);
+        const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, 0, 0, true, this.gameSpeed);
         this.bullets.push(bullet);
     }
 
@@ -116,42 +117,31 @@ class Player {
     }
 
     wallCollisionCheck(walls) {
-        for(let i = 0; i < this.bullets.length; i++){
-            if(this.bullets[i].wallCollisionCheck(walls)){
-                this.bullets[i].destroy()
+        for (const wall of walls){
+            if(CollisionDetector.checkBoxCollision(this.model, wall)){
+                return true;
             }
-        }
-        for (const wall of walls) {
-            if (wall && this.model) {
-                // Verifica a colisão com a parede
-                const playerBox = new THREE.Box3().setFromObject(this.model);
-                const wallBox = new THREE.Box3().setFromObject(wall);
-                if (playerBox.intersectsBox(wallBox)) {
-                    return true; // Colidiu
+            for(let i = 0; i < this.bullets.length; i++){
+                if(CollisionDetector.checkBoxCollision(this.bullets[i].bullet, wall)){
+                    this.bullets[i].destroy()
                 }
             }
         }
-        return false; // Não colidiu
     }
 
     turretCollisionCheck(turret){
-        if(turret.model && this.model){
-                const playerBox = new THREE.Box3().setFromObject(this.model)
-                const turretBox = new THREE.Box3().setFromObject(turret.model)
-                if(playerBox.intersectsBox(turretBox)){
-                    return true;
-                }
-            }
-        return false;
+        if(CollisionDetector.checkBoxCollision(this.model, turret.model)){
+            return true;
+        }
     }
 
     enemyBulletCollisionCheck(enemy){
         for(let i = 0; i < this.bullets.length; i++){
-            if(this.bullets[i].enemyCollisionCheck(enemy)){
+            if(CollisionDetector.checkBoxCollision(this.bullets[i].bullet, enemy)){
+                this.bullets[i].destroy()
                 return true;
             }
         }
-        return false;
     }
 
     destroy(){

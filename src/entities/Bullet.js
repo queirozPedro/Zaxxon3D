@@ -1,7 +1,8 @@
 import * as THREE from 'three'
+import CollisionDetector from '../utils/CollisionDetector.js';
 
 class Bullet{
-    constructor(scene, position, direction, ZSpeed, isPlayerBullet, gameSpeed){
+    constructor(scene, position, rotation, direction, ZSpeed, isPlayerBullet, gameSpeed){
         this.scene = scene;
         this.isPlayerBullet = isPlayerBullet;
         this.direction = direction;
@@ -9,10 +10,10 @@ class Bullet{
         this.maxZLimit = 260;
         this.mimZLimit = -40;
         this.xLimitVariation = 14;
-        this.create(position, ZSpeed)
+        this.create(position, ZSpeed, rotation)
     }
 
-    create(position, ZSpeed){
+    create(position, ZSpeed, rotation){
         const geometry = new THREE.BoxGeometry(0.8, 0.2, 0.2);
         const color = this.isPlayerBullet? 0x00fffff: 0xff0000;
         const material = new THREE.MeshBasicMaterial({ color: color });
@@ -21,11 +22,13 @@ class Bullet{
         this.bullet.position.copy(position)
         
         if(this.isPlayerBullet){
-            // Essa é uma solução temporária. A posição e orientação do tiro vão seguir a inclinação da nave
-            this.bullet.position.y += 0.5;
-            this.bullet.position.z += 2;   
-            this.bullet.rotation.z += 270 * (Math.PI/180)
-            this.bullet.rotation.x += 270 * (Math.PI/180)
+            // Para que o disparo saia do bico da nave
+            this.bullet.position.z += 1.9;
+            this.bullet.position.y += 0.5 - 2 * Math.cos(rotation.x);
+
+            // Correção da orientação da bullet 
+            this.bullet.rotation.z += 3 * (Math.PI / 2);
+            this.bullet.rotation.x += 3 * (Math.PI / 2);
         } else {
             this.ZSpeed = ZSpeed;
             this.bullet.rotation.y = this.direction * (Math.PI/180)
@@ -57,32 +60,6 @@ class Bullet{
             this.destroy()
         } else if(this.bullet.position.x < -this.xLimitVariation || this.bullet.position.x > this.xLimitVariation){
             this.destroy()
-        }
-    }
-    
-    wallCollisionCheck(walls){
-        for (const wall of walls) {
-            if (wall && this.bullet) {
-                // Verifica a colisão com a parede
-                const bulletBox = new THREE.Box3().setFromObject(this.bullet);
-                const wallBox = new THREE.Box3().setFromObject(wall);
-                if (bulletBox.intersectsBox(wallBox)) {
-                    return true; // Colidiu
-                }
-            }
-        }
-        return false;
-    }
-
-    enemyCollisionCheck(enemy){
-        if(enemy && this.bullet){
-            const enemyRitBox = new THREE.Box3().setFromObject(enemy);
-            const bulletBox = new THREE.Box3().setFromObject(this.bullet);
-            if(bulletBox.intersectsBox(enemyRitBox)){
-                this.destroy()
-                return true;
-            }
-            return false;
         }
     }
 

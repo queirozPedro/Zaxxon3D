@@ -1,5 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Bullet from '../entities/Bullet.js';
+import CollisionDetector from '../utils/CollisionDetector.js';
 
 class Turret {
     constructor(scene, direction, position, gameSpeed) {
@@ -58,7 +59,7 @@ class Turret {
         
         if(!this.isDestroyed){
             if (this.lastShootTime >= this.shootInterval / 1000) {
-                const bullet = new Bullet(this.scene, this.model.position, this.direction, this.ZSpeed, false, this.gameSpeed)
+                const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, this.direction, this.ZSpeed, false, this.gameSpeed)
                 this.bullets.push(bullet)
                 this.lastShootTime = 0;
             }
@@ -77,7 +78,7 @@ class Turret {
 
     destroyOutBounds(){
         // Quando a torreta sair dos limites, reseta a posição
-        if (this.model.position.z < -100) {
+        if (this.model.position.z < -120) {
             for(let i = 0; i < this.bullets.length; i++){
                 this.scene.remove(this.bullets[i].destroy())
             }
@@ -87,22 +88,22 @@ class Turret {
     }
     
     wallCollisionCheck(walls) {
-        for(let i = 0; i < this.bullets.length; i++){
-            if(this.bullets[i].wallCollisionCheck(walls)){
-                this.bullets[i].destroy()
+        for (const wall of walls){
+            for(let i = 0; i < this.bullets.length; i++){
+                if(CollisionDetector.checkBoxCollision(this.bullets[i].bullet, wall)){
+                    this.bullets[i].destroy()
+                }
             }
         }
-        this.scene.remove(this.bullet)
-        this.bullet = null;
     }
 
     enemyBulletCollisionCheck(enemy){
         for(let i = 0; i < this.bullets.length; i++){
-            if(this.bullets[i].enemyCollisionCheck(enemy)){
+            if(CollisionDetector.checkBoxCollision(this.bullets[i].bullet, enemy)){
+                this.bullets[i].destroy()
                 return true;
             }
         }
-        return false;
     }
 
     shootDestroy(){
