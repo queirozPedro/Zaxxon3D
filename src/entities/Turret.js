@@ -77,7 +77,7 @@ class Turret {
     }
 
     destroyOutBounds(){
-        // Quando a torreta sair dos limites, reseta a posição
+        // Quando a torreta sair dos limites
         if (this.model.position.z < -120) {
             for(let i = 0; i < this.bullets.length; i++){
                 this.scene.remove(this.bullets[i].destroy())

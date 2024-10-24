@@ -8,9 +8,11 @@ class Player {
         this.model = null;
         this.scene = scene;
         this.gameSpeed = gameSpeed;
+
         this.minHeight = 0.8; // Altura mínima (limite do chão)
         this.maxHeight = 10;   // Altura máxima (limite superior)
         this.maxWidthVariation = 13.5;  // Limites de movimentação lateral
+        
         this.bullets = [];
         this.isShooting = false;
         this.isDestroyed = false;
@@ -129,8 +131,8 @@ class Player {
         }
     }
 
-    turretCollisionCheck(turret){
-        if(CollisionDetector.checkBoxCollision(this.model, turret.model)){
+    enemyCollisionCheck(enemy){
+        if(CollisionDetector.checkBoxCollision(this.model, enemy)){
             return true;
         }
     }

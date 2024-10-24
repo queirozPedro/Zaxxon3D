@@ -65,9 +65,9 @@ const clock = new THREE.Clock();
 
 // Declara o jogador, o array de muros e o de torretas
 const player = new Player(scene, gameSpeed);
-const alien = new Alien (scene);
-const walls = []
-const turrets = []
+const walls = [];
+const turrets = [];
+const aliens = [];
 
 // Algumas variáveis para gerenciar o tempo
 let tempoDecorrido = 0
@@ -102,6 +102,7 @@ function update(){
     // Atualizando os obsctáculos
     updateWalls()
     updateTurrets(deltaTime)
+    updateAliens(deltaTime)
 }
 
 // Atualiza todos os muros
@@ -130,7 +131,7 @@ function updateTurrets(deltaTime){
         }
 
         // Testa a colisao entre o jogador e a torreta
-        if(player.turretCollisionCheck(turrets[i]) && !turrets[i].getIsDestroyed()){
+        if(player.enemyCollisionCheck(turrets[i].model) && !turrets[i].getIsDestroyed()){
             endGame();
         }
 
@@ -148,6 +149,30 @@ function updateTurrets(deltaTime){
     }
 }
 
+// Atualiza os aliens
+function updateAliens(deltaTime){
+    for(let i = 0; i < aliens.length; i++){
+        aliens[i].update(deltaTime);
+
+        // Destroi os tiros do alien que pegar no muro
+        for(let j = 0; j < walls.length; j++){
+            aliens[i].wallCollisionCheck(walls[j].wall);
+        }
+
+        // Checa se o player bater no alien, se bater perde
+        if(player.enemyCollisionCheck(aliens[i].model) && !aliens[i].getIsDestroyed()){
+            endGame();
+        }
+
+        // Checa se o tiro do jogador pegou no alien, se pegar destroi
+        if(!aliens[i].getIsDestroyed()){
+            if(player.enemyBulletCollisionCheck(aliens[i].model)){
+                aliens[i].shootDestroy()
+            }
+        }
+    }
+}   
+
 /**
  * A função spawnObjects instancia os objetos na cena de maneira quase aleatória
  */
@@ -163,6 +188,7 @@ function spawnObjects(){
     walls.push(wall)
 
     for(let i = 0; i < 4; i++){
+        // Chance de 50% para uma torreta spawnar
         if(Math.round(Math.random() * 100) < 50){
             // A posição x da torreta vai variar de -10 a 10
             const turretSpawnPointX = (Math.random() * 20) - 10;
@@ -173,6 +199,13 @@ function spawnObjects(){
             // Cria a instância da torreta
             const turret = new Turret(scene, direction , {x:turretSpawnPointX, y:0, z:turretSpawnPointZ}, gameSpeed);
             turrets.push(turret)
+        
+        // Se a torreta não spawnar, tem 30% de chance de spawnar um alien
+        } else if(Math.round(Math.random() * 100) < 30){
+            const alienSpawnPointZ = wallSpawnPointZ + ((i+1)*30);
+
+            const alien = new Alien(scene, alienSpawnPointZ, gameSpeed);
+            aliens.push(alien)
         }
     }
 }
