@@ -6,6 +6,7 @@ import Player from './entities/Player.js';
 import Ground from './entities/Ground.js';
 import Wall from './entities/Wall.js';
 import Turret from './entities/Turret.js';
+import Alien from './entities/Alien.js';
 
 // Cena, câmera e renderizador
 const scene = new THREE.Scene();
@@ -64,6 +65,7 @@ const clock = new THREE.Clock();
 
 // Declara o jogador, o array de muros e o de torretas
 const player = new Player(scene, gameSpeed);
+const alien = new Alien (scene);
 const walls = []
 const turrets = []
 

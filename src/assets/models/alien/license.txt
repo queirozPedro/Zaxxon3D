@@ -1,0 +1,11 @@
+Model Information:
+* title:	Ufo2
+* source:	https://sketchfab.com/3d-models/ufo2-ec84324c70ec4892816eb6e0d2f22f9f
+* author:	Aveck (https://sketchfab.com/lecmo258809)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Ufo2" (https://sketchfab.com/3d-models/ufo2-ec84324c70ec4892816eb6e0d2f22f9f) by Aveck (https://sketchfab.com/lecmo258809) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
