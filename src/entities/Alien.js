@@ -21,7 +21,7 @@ class Alien {
         
         // atirar
         this.bullets = [];
-        this.shootInterval = 1000; 
+        this.shootInterval = 800; 
         this.lastShootTime = 0;
 
         this.load();
@@ -42,7 +42,7 @@ class Alien {
 
                 // Configura o modelo para projetar e receber sombras
                 this.model.traverse((child) => {
-                    if (child.isMesh) {
+                    if (child.isMesh) {     
                         child.castShadow = true;
                         child.receiveShadow = true;
                     }
@@ -61,23 +61,24 @@ class Alien {
         );
     }
 
-    update(deltaTime){
+    update(deltaTime, player){
         if(this.model){
             this.moveAlien();         
             this.destroyOutBounds();
-            this.shoot(deltaTime);
+            if(player.model)
+                this.shoot(deltaTime, player.model.position);
             for(let i = 0; i < this.bullets.length; i++){
-                this.bullets[i].update()
+                this.bullets[i].update(deltaTime)
             }
         }
     }
     
-    shoot(deltaTime) {
+    shoot(deltaTime, playerPosition) {
         this.lastShootTime += deltaTime;
         
         if(!this.isDestroyed){
             if (this.lastShootTime >= this.shootInterval / 1000) {
-                const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, 90, this.ZSpeed, false, this.gameSpeed)
+                const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, 0, this.ZSpeed, false, false, this.gameSpeed, playerPosition)
                 this.bullets.push(bullet)
                 this.lastShootTime = 0;
             }
@@ -123,8 +124,10 @@ class Alien {
     }
 
     destroyOutBounds(){
-        // Quando a torreta sair dos limites, reseta a posição
-        if (this.model.position.z < -40) {
+        if (this.model.position.z < -120) {
+            for(let i = 0; i < this.bullets.length; i++){
+                this.scene.remove(this.bullets[i].destroy())
+            }
             this.scene.remove(this.model)
             this.model = null
         }

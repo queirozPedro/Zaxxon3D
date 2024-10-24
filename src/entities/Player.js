@@ -19,11 +19,11 @@ class Player {
         this.load(); // Chama o método de carregamento do modelo
     }
 
-    update(keysPressed) {
+    update(keysPressed, deltaTime) {
         this.movementControls(keysPressed);
 
         for (let i = 0; i < this.bullets.length; i++) {
-            this.bullets[i].update();
+            this.bullets[i].update(deltaTime);
         }
     }
 
@@ -83,7 +83,7 @@ class Player {
     }
 
     shoot() {
-        const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, 0, 0, true, this.gameSpeed);
+        const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, 0, 0, true, false, this.gameSpeed, this);
         this.bullets.push(bullet);
     }
 

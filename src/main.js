@@ -35,7 +35,7 @@ controls.target.set(0, 0, 0);
 controls.update();
 
 // Carrega o chão e o background, e permite ao chão receber sombras
-const gameSpeed = 1.5;
+const gameSpeed = 2;
 const background = new Background(scene, 8);
 const ground = new Ground(scene, gameSpeed);
 ground.ground.receiveShadow = true;
@@ -95,7 +95,7 @@ function update(){
     }
 
     // Atualizando o jogador e o environment
-    player.update(keysPressed);
+    player.update(keysPressed, deltaTime);
     ground.update(deltaTime, gameSpeed);
     background.update(); 
 
@@ -107,11 +107,11 @@ function update(){
 
 // Atualiza todos os muros
 function updateWalls(){
-    for(let i = walls.length - 1; i >= 0; i--){ // Iteração inversa para remoção segura
-        if(walls[i] && walls[i].wall){ // Verifica se o muro ainda existe
+    for(let i = walls.length - 1; i >= 0; i--){ 
+        if(walls[i] && walls[i].wall){
             walls[i].update();
         } else {
-            walls.splice(i, 1); // Remove o muro que for null ou destruído
+            walls.splice(i, 1);
         }
 
         // Testa a colisão entre o player e os tiros contra o muro 
@@ -123,16 +123,15 @@ function updateWalls(){
 
 // Atualiza todas as torretas
 function updateTurrets(deltaTime){
-    for(let i = turrets.length - 1; i >= 0; i--){ // Iteração inversa para remoção segura
-        if(turrets[i] && turrets[i].model){ // Verifica se a torreta ainda existe
+    for(let i = turrets.length - 1; i >= 0; i--){ 
+        if(turrets[i]){ 
             turrets[i].update(deltaTime);
 
-            // Testa a colisão entre os tiros da torreta e os muros
             for(let j = 0; j < walls.length; j++){
                 turrets[i].wallCollisionCheck(walls[j].wall);
             }
         } else {
-            turrets.splice(i, 1); // Remove a torreta que for null ou destruída
+            turrets.splice(i, 1); // Remove a torreta que for null
         }
 
         // Testa a colisão entre o jogador e a torreta
@@ -156,9 +155,9 @@ function updateTurrets(deltaTime){
 
 // Atualiza os aliens
 function updateAliens(deltaTime){
-    for(let i = aliens.length - 1; i >= 0; i--){ // Iteração inversa para remoção segura
-        if(aliens[i]){ // Verifica se o alien ainda existe
-            aliens[i].update(deltaTime);
+    for(let i = aliens.length - 1; i >= 0; i--){
+        if(aliens[i]){
+            aliens[i].update(deltaTime, player);
 
             // Destroi os tiros do alien que pegar no muro
             for(let j = 0; j < walls.length; j++){
@@ -177,7 +176,7 @@ function updateAliens(deltaTime){
                 }
             }
         } else {
-            aliens.splice(i, 1); // Remove o alien que for null ou destruído
+            aliens.splice(i, 1); 
         }
     }
 }

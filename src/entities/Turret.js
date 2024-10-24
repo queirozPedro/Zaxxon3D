@@ -16,10 +16,10 @@ class Turret {
         this.lastShootTime = 0;
         this.ZSpeed = 0.25; // Velocidade de movimento da torreta
 
-        this.loadModel();
+        this.load();
     }
 
-    loadModel() {
+    load() {
         const loader = new GLTFLoader();
 
         loader.load(
@@ -59,7 +59,7 @@ class Turret {
         
         if(!this.isDestroyed){
             if (this.lastShootTime >= this.shootInterval / 1000) {
-                const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, this.direction, this.ZSpeed, false, this.gameSpeed)
+                const bullet = new Bullet(this.scene, this.model.position, this.model.rotation, this.direction, this.ZSpeed, false, true, this.gameSpeed, null)
                 this.bullets.push(bullet)
                 this.lastShootTime = 0;
             }
@@ -71,7 +71,7 @@ class Turret {
             this.moveTurret(); // Move a torreta junto com a parede
             this.shoot(deltaTime); // Controla os tiros
             for(let i = 0; i < this.bullets.length; i++){
-                this.bullets[i].update()
+                this.bullets[i].update(deltaTime)
             }
         }
     }
