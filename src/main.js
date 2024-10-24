@@ -107,13 +107,15 @@ function update(){
 
 // Atualiza todos os muros
 function updateWalls(){
-    // Percorre os muros checando as colisões
-    for(let i = 0; i < walls.length; i++){
-        if(walls[i].wall){
-            walls[i].update()
+    for(let i = walls.length - 1; i >= 0; i--){ // Iteração inversa para remoção segura
+        if(walls[i] && walls[i].wall){ // Verifica se o muro ainda existe
+            walls[i].update();
+        } else {
+            walls.splice(i, 1); // Remove o muro que for null ou destruído
         }
+
         // Testa a colisão entre o player e os tiros contra o muro 
-        if (player.wallCollisionCheck(walls[i].wall)) {
+        if (walls[i] && player.wallCollisionCheck(walls[i].wall)) {
             endGame();
         }
     }
@@ -121,29 +123,32 @@ function updateWalls(){
 
 // Atualiza todas as torretas
 function updateTurrets(deltaTime){
-    for(let i = 0; i < turrets.length; i++){
-        if(turrets[i].model){
-            turrets[i].update(deltaTime)
-            // Testa a colisão entre os tiro da torreta e os muros
+    for(let i = turrets.length - 1; i >= 0; i--){ // Iteração inversa para remoção segura
+        if(turrets[i] && turrets[i].model){ // Verifica se a torreta ainda existe
+            turrets[i].update(deltaTime);
+
+            // Testa a colisão entre os tiros da torreta e os muros
             for(let j = 0; j < walls.length; j++){
                 turrets[i].wallCollisionCheck(walls[j].wall);
             }
+        } else {
+            turrets.splice(i, 1); // Remove a torreta que for null ou destruída
         }
 
-        // Testa a colisao entre o jogador e a torreta
-        if(player.enemyCollisionCheck(turrets[i].model) && !turrets[i].getIsDestroyed()){
+        // Testa a colisão entre o jogador e a torreta
+        if(turrets[i] && player.enemyCollisionCheck(turrets[i].model) && !turrets[i].getIsDestroyed()){
             endGame();
         }
 
-        // Testa a colisão entre o tiro do jogador e alguma torreta
-        if(!turrets[i].getIsDestroyed()){
+        // Testa a colisão entre o tiro do jogador e a torreta
+        if(turrets[i] && !turrets[i].getIsDestroyed()){
             if(player.enemyBulletCollisionCheck(turrets[i].model)){
-                turrets[i].shootDestroy()
+                turrets[i].shootDestroy();
             }
         }
 
         // Testa as colisões entre o tiro da torreta e o jogador
-        if(turrets[i].enemyBulletCollisionCheck(player.model)){
+        if(turrets[i] && turrets[i].enemyBulletCollisionCheck(player.model)){
             endGame();
         }
     }
@@ -151,27 +156,32 @@ function updateTurrets(deltaTime){
 
 // Atualiza os aliens
 function updateAliens(deltaTime){
-    for(let i = 0; i < aliens.length; i++){
-        aliens[i].update(deltaTime);
+    for(let i = aliens.length - 1; i >= 0; i--){ // Iteração inversa para remoção segura
+        if(aliens[i]){ // Verifica se o alien ainda existe
+            aliens[i].update(deltaTime);
 
-        // Destroi os tiros do alien que pegar no muro
-        for(let j = 0; j < walls.length; j++){
-            aliens[i].wallCollisionCheck(walls[j].wall);
-        }
-
-        // Checa se o player bater no alien, se bater perde
-        if(player.enemyCollisionCheck(aliens[i].model) && !aliens[i].getIsDestroyed()){
-            endGame();
-        }
-
-        // Checa se o tiro do jogador pegou no alien, se pegar destroi
-        if(!aliens[i].getIsDestroyed()){
-            if(player.enemyBulletCollisionCheck(aliens[i].model)){
-                aliens[i].shootDestroy()
+            // Destroi os tiros do alien que pegar no muro
+            for(let j = 0; j < walls.length; j++){
+                aliens[i].wallCollisionCheck(walls[j].wall);
             }
+
+            // Checa se o player bater no alien, se bater perde
+            if(player.enemyCollisionCheck(aliens[i].model) && !aliens[i].getIsDestroyed()){
+                endGame();
+            }
+
+            // Checa se o tiro do jogador pegou no alien, se pegar destrói
+            if(!aliens[i].getIsDestroyed()){
+                if(player.enemyBulletCollisionCheck(aliens[i].model)){
+                    aliens[i].shootDestroy();
+                }
+            }
+        } else {
+            aliens.splice(i, 1); // Remove o alien que for null ou destruído
         }
     }
-}   
+}
+
 
 /**
  * A função spawnObjects instancia os objetos na cena de maneira quase aleatória
