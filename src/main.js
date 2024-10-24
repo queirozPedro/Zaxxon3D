@@ -21,6 +21,13 @@ document.body.appendChild(renderer.domElement);
 // Ajustando a câmera para a perspectiva do Zaxxon
 camera.position.set(-12, 19, -17);
 
+// Adapta a cena de acordo com o tamanho da tela 
+function onWindowResize(camera, renderer) {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
 // Controles orbitais para teste
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0);
@@ -52,25 +59,19 @@ function startLigths(){
 
 startLigths()
 
-// Dicionário que atribui true para as teclas que estão pressionadas
-const keysPressed = {};
-window.addEventListener('keydown', (event) => {
-    keysPressed[event.key] = true;
-});
-// Adiciona false para as teclas que não estão mais apertadas
-window.addEventListener('keyup', (event) => {
-    keysPressed[event.key] = false;
-});
-
 // Relógio que será usado para medir o deltaTime
 const clock = new THREE.Clock();
 
+// Declara o jogador, o array de muros e o de torretas
 const player = new Player(scene, gameSpeed);
 const walls = []
 const turrets = []
+
+// Algumas variáveis para gerenciar o tempo
 let tempoDecorrido = 0
 let intervaloDeTempo = 0;
 
+// Função animate, que executa a cada frame
 function animate() {
     requestAnimationFrame(animate);
     
@@ -79,13 +80,12 @@ function animate() {
     renderer.render(scene, camera);    
 }
 
-
 function update(){
-
+    // clock.getDelta retorna o tempo (em segundos) decorrido desde de sua ultima chamada 
     const deltaTime = clock.getDelta();
-
     tempoDecorrido += deltaTime;
 
+    // A cada intervaloDeTempo novos obstáculos irão spawnar
     if(tempoDecorrido >= intervaloDeTempo){
         spawnObjects()
         tempoDecorrido = 0;
@@ -97,10 +97,12 @@ function update(){
     ground.update(deltaTime, gameSpeed);
     background.update(); 
 
+    // Atualizando os obsctáculos
     updateWalls()
     updateTurrets(deltaTime)
 }
 
+// Atualiza todos os muros
 function updateWalls(){
     // Percorre os muros checando as colisões
     for(let i = 0; i < walls.length; i++){
@@ -114,6 +116,7 @@ function updateWalls(){
     }
 }
 
+// Atualiza todas as torretas
 function updateTurrets(deltaTime){
     for(let i = 0; i < turrets.length; i++){
         if(turrets[i].model){
@@ -172,7 +175,19 @@ function spawnObjects(){
     }
 }
 
-// Função para reiniciar o jogo
+// Dicionário que atribui true para as teclas que estão pressionadas
+const keysPressed = {};
+window.addEventListener('keydown', (event) => {
+    keysPressed[event.key] = true;
+});
+// Adiciona false para as teclas que não estão mais apertadas
+window.addEventListener('keyup', (event) => {
+    keysPressed[event.key] = false;
+});
+
+window.addEventListener('resize', (event) => onWindowResize(camera, renderer));
+
+// Função para finalizar o jogo
 function endGame() {
     player.destroy();
 }
