@@ -17,7 +17,7 @@ class Alien {
         
         // A direção do movimento do alien
         this.xMovementDirection = ((Math.random() * 2) - 1) / (10 - gameSpeed) 
-        this.yMovementDirection = ((Math.random() * 2) - 1) / (10 - gameSpeed)
+        this.yMovementDirection = this.xMovementDirection / 2
         
         // atirar
         this.bullets = [];

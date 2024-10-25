@@ -35,7 +35,7 @@ controls.target.set(0, 0, 0);
 controls.update();
 
 // Carrega o chão e o background, e permite ao chão receber sombras
-const gameSpeed = 2;
+const gameSpeed = 1.8;
 const background = new Background(scene, 8);
 const ground = new Ground(scene, gameSpeed);
 ground.ground.receiveShadow = true;
@@ -175,6 +175,11 @@ function updateAliens(deltaTime){
                     aliens[i].shootDestroy();
                 }
             }
+
+            // Testa as colisões entre o tiro do alien e o jogador
+            if(aliens[i] && aliens[i].enemyBulletCollisionCheck(player.model)){
+                endGame();
+            }
         } else {
             aliens.splice(i, 1); 
         }
@@ -188,8 +193,8 @@ function updateAliens(deltaTime){
 function spawnObjects(){
     // A altura do muro
     const altura = 3;
-    // A quantidade de muros quebrados, no mínimo 1 e no máximo 5
-    const murosQuebrados = Math.round(Math.random() * 4) + 1;
+    // A quantidade de muros quebrados, no mínimo 2 e no máximo 6
+    const murosQuebrados = Math.round(Math.random() * 4) + 2;
     // A posição z do muro, começando no final do ground e variando mais 20
     const wallSpawnPointZ = 260 + Math.random() * 30;
     // Cria a instância do muro

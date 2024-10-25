@@ -17,7 +17,13 @@ class Bullet{
     }
 
     create(position, ZSpeed, rotation){
-        const geometry = new THREE.BoxGeometry(0.8, 0.3, 0.3);
+        let geometry = null
+        if(this.isPlayerBullet || this.isTurretBullet){
+            geometry = new THREE.BoxGeometry(0.8, 0.3, 0.3);
+        }
+        else{
+            geometry = new THREE.BoxGeometry(.5, .5, .5);
+        }
         const color = this.isPlayerBullet? 0x00fffff: this.isTurretBullet? 0xff0000: 0xffff00;
         const material = new THREE.MeshBasicMaterial({ color: color });
         this.bullet = new THREE.Mesh(geometry, material)
