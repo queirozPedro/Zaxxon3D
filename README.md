@@ -1,12 +1,5 @@
-# Zaxxon3D
-Reprodução do jogo Zaxxon em 3D usando Threejs 
-<p><a href="https://queirozpedro.github.io/Zaxxon3D/src/">Clique aqui</a> para jogar</p>
-
-## Sobre
-Zaxxon3D é uma releitura do clássico jogo Zaxxon, um shooter isométrico desenvolvido em 1982 pela SEGA. Zaxxon foi o primeiro jogo a empregar a projeção axonométrica, um tipo de projeção isométrica que simula três dimenções de um ponto de vista em terceira pessoa. 
-
-## Descrição
-Zaxxon3D é um projeto em 3D desenvolvido com JavaScript e Three.js, que oferece uma experiência de voo com gráficos 3D diretamente no navegador. O jogador assume o controle de uma espaçonave em um espaço com inimigos e obstáculos. A missão é destruir o máximo de inimigos possível e sobreviver, desviando de barreiras e evitando ser atingido.
+# Zaxxon Remastered
+Zaxxon Remastered é uma releitura do clássico jogo Zaxxon, um shooter isométrico desenvolvido em 1982 pela SEGA. Zaxxon foi o primeiro jogo a empregar a projeção axonométrica, um tipo de projeção isométrica que simula três dimenções de um ponto de vista em terceira pessoa. Zaxxon3D é um projeto em 3D desenvolvido com JavaScript e Three.js, que oferece uma experiência de voo com gráficos 3D diretamente no navegador. O jogador assume o controle de uma espaçonave em um espaço com inimigos e obstáculos. A missão é destruir o máximo de inimigos possível e sobreviver, desviando de barreiras e evitando ser atingido. A demo foi publicada no Github Pages, e está acessivel atravez do link: https://queirozpedro.github.io/Zaxxon3D/src/
 
 ### Inimigos
 Os inimigos no jogo são representados por torretas e outras aeronaves que tentam impedir o progresso do jogador. Eles possuem comportamentos distintos:
